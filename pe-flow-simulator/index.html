@@ -3,311 +3,489 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PE Flow Simulator</title>
+  <title>PE Portföljsimulator</title>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; color: #111; }
-    header { background: #1e293b; color: #fff; padding: 20px 32px; display: flex; align-items: baseline; gap: 16px; }
-    header h1 { font-size: 22px; font-weight: 700; }
-    header span { font-size: 14px; color: #94a3b8; }
-    main { max-width: 1200px; margin: 0 auto; padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; }
-    .panel { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .panel h2 { font-size: 18px; font-weight: 600; margin: 0 0 16px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-    .grid label { display: flex; flex-direction: column; font-size: 13px; font-weight: 500; color: #555; gap: 4px; }
-    .grid label input, .grid label select { padding: 8px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
-    .actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn { padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    header { background: #1e293b; color: #fff; padding: 16px 32px; display: flex; align-items: baseline; gap: 16px; }
+    header h1 { font-size: 20px; font-weight: 700; }
+    header span { font-size: 13px; color: #94a3b8; }
+    .layout { display: flex; min-height: calc(100vh - 56px); }
+    .sidebar { width: 280px; min-width: 280px; background: #fff; border-right: 1px solid #e5e7eb; padding: 16px 0; overflow-y: auto; }
+    .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; padding: 8px 16px 4px; }
+    .fund-item { padding: 10px 16px; cursor: pointer; font-size: 13px; border-left: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; }
+    .fund-item:hover { background: #f9fafb; }
+    .fund-item.active { background: #eff6ff; border-left-color: #2563eb; font-weight: 600; }
+    .fund-item .cat-badge { font-size: 10px; background: #e5e7eb; color: #555; padding: 2px 6px; border-radius: 8px; font-weight: 400; }
+    .sidebar-btn { width: calc(100% - 32px); margin: 8px 16px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .sidebar-btn:hover { background: #1d4ed8; }
+    .sidebar-btn.secondary { background: #f3f4f6; color: #555; border: 1px solid #ddd; }
+    .sidebar-btn.secondary:hover { background: #e5e7eb; }
+    .main-content { flex: 1; padding: 24px; overflow-y: auto; }
+    .panel { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; font-weight: 600; margin: 0 0 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .grid label { display: flex; flex-direction: column; font-size: 12px; font-weight: 500; color: #555; gap: 4px; }
+    .grid label input, .grid label select { padding: 7px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
     .btn:hover { background: #1d4ed8; }
-    .btn-disabled { padding: 10px 20px; background: #f3f4f6; color: #888; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; cursor: not-allowed; }
-    .metrics-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
-    .metrics-header h2 { margin: 0; }
-    .nav-label { font-size: 13px; font-weight: 500; color: #555; display: flex; align-items: center; gap: 8px; }
-    .nav-label input { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; width: 140px; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-    .card { padding: 16px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; }
-    .card-label { font-size: 12px; color: #666; margin-bottom: 4px; }
-    .card-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-disabled { padding: 8px 16px; background: #f3f4f6; color: #888; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; cursor: not-allowed; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .card { padding: 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; }
+    .card-label { font-size: 11px; color: #666; margin-bottom: 2px; }
+    .card-value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .table-header h2 { margin: 0; }
-    .btn-sm { padding: 6px 14px; background: #2563eb; color: #fff; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; }
+    .btn-sm { padding: 5px 12px; background: #2563eb; color: #fff; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; }
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { text-align: left; padding: 8px 6px; border-bottom: 2px solid #e5e7eb; font-weight: 600; font-size: 12px; color: #666; white-space: nowrap; }
-    td { padding: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { text-align: left; padding: 7px 6px; border-bottom: 2px solid #e5e7eb; font-weight: 600; font-size: 11px; color: #666; white-space: nowrap; }
+    td { padding: 5px 6px; }
     tr.row { border-bottom: 1px solid #f3f4f6; }
-    .cell-input { padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 3px; font-size: 13px; width: 100%; box-sizing: border-box; }
-    .td-muted { color: #888; font-size: 12px; }
-    .td-number { font-variant-numeric: tabular-nums; text-align: right; }
-    .delete-btn { background: none; border: none; color: #dc2626; font-size: 18px; cursor: pointer; padding: 2px 6px; }
-    .empty { text-align: center; padding: 32px; color: #888; }
-    .legend { display: flex; gap: 20px; margin-bottom: 16px; font-size: 13px; }
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .cell-input { padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 3px; font-size: 12px; width: 100%; }
+    .td-muted { color: #888; font-size: 11px; }
+    .td-number { font-variant-numeric: tabular-nums; text-align: right; padding: 5px 6px; }
+    .delete-btn { background: none; border: none; color: #dc2626; font-size: 16px; cursor: pointer; padding: 2px 6px; }
+    .empty { text-align: center; padding: 24px; color: #888; font-size: 13px; }
+    .cat-color { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
+    .tab { padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: #666; background: none; border-top: none; border-left: none; border-right: none; }
+    .tab.active { color: #2563eb; border-bottom-color: #2563eb; }
     .chart-wrap { overflow-x: auto; }
+    .legend { display: flex; gap: 16px; margin-bottom: 12px; font-size: 12px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .forecast-row { display: grid; grid-template-columns: 80px repeat(auto-fill, minmax(80px, 1fr)); gap: 4px; align-items: center; margin-bottom: 4px; }
+    .forecast-row span { font-size: 12px; color: #555; font-weight: 500; }
+    .forecast-row input { padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 3px; font-size: 12px; width: 100%; }
+    .section-title { font-size: 13px; font-weight: 600; color: #444; margin: 16px 0 8px; }
+    .cat-summary { display: flex; gap: 8px; align-items: center; padding: 10px 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; margin-bottom: 8px; }
+    .cat-summary-name { font-size: 13px; font-weight: 600; flex: 1; }
+    .cat-summary-val { font-size: 12px; color: #555; min-width: 100px; text-align: right; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState, useMemo, useCallback } = React;
+
+    // --- Constants ---
+    const CATEGORIES = [
+      { value: 'buyout', label: 'Buyout', color: '#2563eb' },
+      { value: 'venture', label: 'Venture Capital', color: '#7c3aed' },
+      { value: 'infrastructure', label: 'Infrastruktur', color: '#0891b2' },
+      { value: 'real_estate', label: 'Fastighet', color: '#d97706' },
+      { value: 'credit', label: 'Kredit', color: '#059669' },
+      { value: 'secondaries', label: 'Secondaries', color: '#dc2626' },
+      { value: 'other', label: 'Övrigt', color: '#6b7280' },
+    ];
+
+    function catColor(cat) { return (CATEGORIES.find(c => c.value === cat) || CATEGORIES[6]).color; }
+    function catLabel(cat) { return (CATEGORIES.find(c => c.value === cat) || CATEGORIES[6]).label; }
 
     // --- Utils ---
     let idCounter = 0;
-    function generateId() { return `cf-${++idCounter}-${Date.now()}`; }
+    function gid() { return `f-${++idCounter}-${Date.now()}`; }
 
-    function formatCurrency(value, currency) {
+    function fmt(value, currency) {
       return new Intl.NumberFormat('sv-SE', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
     }
-
-    function formatPercent(value) { return `${(value * 100).toFixed(1)}%`; }
-
-    function quarterFromDate(date) {
-      const d = new Date(date);
-      const q = Math.ceil((d.getMonth() + 1) / 3);
-      return `Q${q} ${d.getFullYear()}`;
+    function fmtM(value, currency) {
+      const m = value / 1e6;
+      return `${m.toFixed(1)} M ${currency}`;
     }
+    function fmtPct(v) { return `${(v * 100).toFixed(1)}%`; }
 
-    function computeMetrics(config, cashFlows, currentNav) {
-      const totalDrawn = cashFlows.filter(cf => cf.type === 'drawdown').reduce((s, cf) => s + cf.amount, 0);
-      const totalDistributed = cashFlows.filter(cf => cf.type === 'distribution').reduce((s, cf) => s + cf.amount, 0);
-      const netCashFlow = totalDistributed - totalDrawn;
-      const paidIn = totalDrawn || 1;
+    function createFund(name, category, commitment, vintageYear, currency, lifeYears) {
+      const id = gid();
+      const currentYear = new Date().getFullYear();
+      const drawdowns = {};
+      const distributions = {};
+      // Default drawdown curve
+      const ddPcts = [0.15, 0.25, 0.20, 0.15, 0.10, 0.08, 0.05, 0.02];
+      for (let i = 0; i < lifeYears; i++) {
+        const yr = vintageYear + i;
+        drawdowns[yr] = Math.round(commitment * (ddPcts[i] || 0));
+        // Distributions start around year 4-5
+        if (i >= 4) {
+          const pct = 0.05 + (i - 4) * 0.10;
+          distributions[yr] = Math.round(commitment * pct);
+        } else {
+          distributions[yr] = 0;
+        }
+      }
+      // Calculate drawn so far
+      let drawn = 0;
+      let distributed = 0;
+      for (let yr = vintageYear; yr <= currentYear; yr++) {
+        drawn += drawdowns[yr] || 0;
+        distributed += distributions[yr] || 0;
+      }
       return {
-        totalDrawn, totalDistributed, netCashFlow,
-        dpi: totalDistributed / paidIn,
-        rvpi: currentNav / paidIn,
-        tvpi: (totalDistributed + currentNav) / paidIn,
-        irr: null,
-        unfundedCommitment: config.commitmentSize - totalDrawn,
-        nav: currentNav,
+        id, name, category, commitment, vintageYear, currency, lifeYears,
+        nav: Math.round(drawn * 1.1 - distributed),
+        drawdowns, distributions,
       };
     }
 
-    function createDefaultCashFlows(config) {
-      const flows = [];
-      const year = config.vintageYear;
-      const pcts = [0.15, 0.2, 0.2, 0.15, 0.1, 0.1, 0.05, 0.05];
-      for (let i = 0; i < Math.min(pcts.length, config.fundLifeYears); i++) {
-        const date = `${year + i}-03-15`;
-        flows.push({ id: generateId(), date, quarter: quarterFromDate(date), type: 'drawdown', amount: Math.round(config.commitmentSize * pcts[i]), description: `Capital call år ${i + 1}` });
-      }
-      for (let i = 4; i < config.fundLifeYears; i++) {
-        const pct = 0.05 + (i - 4) * 0.08;
-        const date = `${year + i}-09-15`;
-        flows.push({ id: generateId(), date, quarter: quarterFromDate(date), type: 'distribution', amount: Math.round(config.commitmentSize * pct), description: `Distribution år ${i + 1}` });
-      }
-      return flows.sort((a, b) => a.date.localeCompare(b.date));
-    }
+    // --- Portfolio Dashboard ---
+    function PortfolioDashboard({ funds, currency }) {
+      const currentYear = new Date().getFullYear();
+      const totals = useMemo(() => {
+        let commitment = 0, nav = 0, drawn = 0, distributed = 0;
+        for (const f of funds) {
+          commitment += f.commitment;
+          nav += f.nav;
+          for (const yr in f.drawdowns) { if (parseInt(yr) <= currentYear) drawn += f.drawdowns[yr]; }
+          for (const yr in f.distributions) { if (parseInt(yr) <= currentYear) distributed += f.distributions[yr]; }
+        }
+        const paidIn = drawn || 1;
+        return { commitment, nav, drawn, distributed, unfunded: commitment - drawn, dpi: distributed / paidIn, tvpi: (distributed + nav) / paidIn };
+      }, [funds, currentYear]);
 
-    // --- FundConfigPanel ---
-    function FundConfigPanel({ config, onChange, onGenerate }) {
-      const update = (partial) => onChange({ ...config, ...partial });
-      return (
-        <div className="panel">
-          <h2>Fondkonfiguration</h2>
-          <div className="grid">
-            <label>Fondnamn<input value={config.name} onChange={e => update({ name: e.target.value })} /></label>
-            <label>Vintage-år<input type="number" value={config.vintageYear} onChange={e => update({ vintageYear: parseInt(e.target.value) || 2020 })} /></label>
-            <label>Åtagande (commitment)<input type="number" value={config.commitmentSize} onChange={e => update({ commitmentSize: parseFloat(e.target.value) || 0 })} /></label>
-            <label>Fondlivslängd (år)<input type="number" min={1} max={20} value={config.fundLifeYears} onChange={e => update({ fundLifeYears: parseInt(e.target.value) || 10 })} /></label>
-            <label>Valuta
-              <select value={config.currency} onChange={e => update({ currency: e.target.value })}>
-                <option value="SEK">SEK</option>
-                <option value="EUR">EUR</option>
-                <option value="USD">USD</option>
-              </select>
-            </label>
-          </div>
-          <div className="actions">
-            <button className="btn" onClick={onGenerate}>Generera exempelflöden</button>
-            <button className="btn-disabled" disabled title="Kommer snart">Importera drawdown-fil</button>
-          </div>
-        </div>
-      );
-    }
+      // Category breakdown
+      const catBreakdown = useMemo(() => {
+        const map = {};
+        for (const f of funds) {
+          if (!map[f.category]) map[f.category] = { commitment: 0, nav: 0, count: 0 };
+          map[f.category].commitment += f.commitment;
+          map[f.category].nav += f.nav;
+          map[f.category].count++;
+        }
+        return Object.entries(map).sort((a, b) => b[1].commitment - a[1].commitment);
+      }, [funds]);
 
-    // --- MetricsPanel ---
-    function MetricsPanel({ metrics, currency, nav, onNavChange }) {
-      const cards = [
-        { label: 'Totalt indraget', value: formatCurrency(metrics.totalDrawn, currency) },
-        { label: 'Totalt distribuerat', value: formatCurrency(metrics.totalDistributed, currency), color: '#16a34a' },
-        { label: 'Netto kassaflöde', value: formatCurrency(metrics.netCashFlow, currency), color: metrics.netCashFlow >= 0 ? '#16a34a' : '#dc2626' },
-        { label: 'Ofonderat åtagande', value: formatCurrency(metrics.unfundedCommitment, currency) },
-        { label: 'NAV', value: formatCurrency(metrics.nav, currency) },
-        { label: 'DPI', value: formatPercent(metrics.dpi) },
-        { label: 'RVPI', value: formatPercent(metrics.rvpi) },
-        { label: 'TVPI', value: formatPercent(metrics.tvpi), color: metrics.tvpi >= 1 ? '#16a34a' : '#dc2626' },
-      ];
-      return (
-        <div className="panel">
-          <div className="metrics-header">
-            <h2>Nyckeltal</h2>
-            <label className="nav-label">Nuvarande NAV:<input type="number" value={nav} onChange={e => onNavChange(parseFloat(e.target.value) || 0)} /></label>
+      // Yearly forecast
+      const yearlyForecast = useMemo(() => {
+        const years = {};
+        for (const f of funds) {
+          for (const yr in f.drawdowns) {
+            if (!years[yr]) years[yr] = { drawdown: 0, distribution: 0 };
+            years[yr].drawdown += f.drawdowns[yr];
+          }
+          for (const yr in f.distributions) {
+            if (!years[yr]) years[yr] = { drawdown: 0, distribution: 0 };
+            years[yr].distribution += f.distributions[yr];
+          }
+        }
+        return Object.entries(years).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+      }, [funds]);
+
+      if (funds.length === 0) {
+        return (
+          <div className="panel">
+            <h2>Portföljöversikt</h2>
+            <div className="empty">Lägg till fonder med knappen i sidomenyn för att börja.</div>
           </div>
-          <div className="cards">
-            {cards.map(c => (
-              <div key={c.label} className="card">
-                <div className="card-label">{c.label}</div>
-                <div className="card-value" style={{ color: c.color || '#111' }}>{c.value}</div>
+        );
+      }
+
+      const chartHeight = 220;
+      const maxVal = Math.max(...yearlyForecast.map(([, v]) => Math.max(v.drawdown, v.distribution)), 1);
+      const barW = Math.max(24, Math.min(50, 700 / yearlyForecast.length));
+
+      return (
+        <div>
+          <div className="panel">
+            <h2>Portföljöversikt — {funds.length} fonder</h2>
+            <div className="cards">
+              <div className="card"><div className="card-label">Totalt åtagande</div><div className="card-value">{fmtM(totals.commitment, currency)}</div></div>
+              <div className="card"><div className="card-label">Totalt indraget</div><div className="card-value">{fmtM(totals.drawn, currency)}</div></div>
+              <div className="card"><div className="card-label">Totalt distribuerat</div><div className="card-value" style={{color:'#16a34a'}}>{fmtM(totals.distributed, currency)}</div></div>
+              <div className="card"><div className="card-label">Totalt NAV</div><div className="card-value">{fmtM(totals.nav, currency)}</div></div>
+              <div className="card"><div className="card-label">Ofonderat</div><div className="card-value">{fmtM(totals.unfunded, currency)}</div></div>
+              <div className="card"><div className="card-label">DPI</div><div className="card-value">{fmtPct(totals.dpi)}</div></div>
+              <div className="card"><div className="card-label">TVPI</div><div className="card-value" style={{color: totals.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtPct(totals.tvpi)}</div></div>
+            </div>
+          </div>
+
+          <div className="panel">
+            <h2>Per kategori</h2>
+            {catBreakdown.map(([cat, data]) => (
+              <div key={cat} className="cat-summary">
+                <span className="cat-color" style={{background: catColor(cat)}} />
+                <span className="cat-summary-name">{catLabel(cat)} ({data.count})</span>
+                <span className="cat-summary-val">Åtagande: {fmtM(data.commitment, currency)}</span>
+                <span className="cat-summary-val">NAV: {fmtM(data.nav, currency)}</span>
               </div>
             ))}
           </div>
-        </div>
-      );
-    }
 
-    // --- CashFlowChart ---
-    function CashFlowChart({ cashFlows, currency }) {
-      if (cashFlows.length === 0) {
-        return <div className="panel"><h2>Kassaflödesdiagram</h2><div className="empty">Lägg till kassaflöden för att se diagrammet.</div></div>;
-      }
-      const sorted = [...cashFlows].sort((a, b) => a.date.localeCompare(b.date));
-      const quarterMap = new Map();
-      let cumNet = 0;
-      for (const cf of sorted) {
-        const q = cf.quarter;
-        if (!quarterMap.has(q)) quarterMap.set(q, { drawdown: 0, distribution: 0, net: 0 });
-        const entry = quarterMap.get(q);
-        if (cf.type === 'drawdown') { entry.drawdown += cf.amount; cumNet -= cf.amount; }
-        else { entry.distribution += cf.amount; cumNet += cf.amount; }
-        entry.net = cumNet;
-      }
-      const data = Array.from(quarterMap.entries()).map(([quarter, values]) => ({ quarter, ...values }));
-      const maxVal = Math.max(...data.flatMap(d => [d.drawdown, d.distribution, Math.abs(d.net)]), 1);
-      const chartHeight = 250;
-      const barWidth = Math.max(20, Math.min(50, 600 / data.length));
-
-      return (
-        <div className="panel">
-          <h2>Kassaflödesdiagram</h2>
-          <div className="legend">
-            <span className="legend-item"><span className="dot" style={{ background: '#dc2626' }} /> Drawdowns</span>
-            <span className="legend-item"><span className="dot" style={{ background: '#16a34a' }} /> Distributioner</span>
-            <span className="legend-item"><span className="dot" style={{ background: '#2563eb' }} /> Kumulativt netto</span>
-          </div>
-          <div className="chart-wrap">
-            <svg width={data.length * (barWidth + 16) + 40} height={chartHeight + 60}>
-              {data.map((d, i) => {
-                const x = i * (barWidth + 16) + 20;
-                const drawH = (d.drawdown / maxVal) * chartHeight;
-                const distH = (d.distribution / maxVal) * chartHeight;
-                return (
-                  <g key={d.quarter}>
-                    <rect x={x} y={chartHeight - drawH} width={barWidth / 2 - 1} height={drawH} fill="#dc2626" opacity={0.8} rx={2}>
-                      <title>{d.quarter}: Drawdown {formatCurrency(d.drawdown, currency)}</title>
-                    </rect>
-                    <rect x={x + barWidth / 2 + 1} y={chartHeight - distH} width={barWidth / 2 - 1} height={distH} fill="#16a34a" opacity={0.8} rx={2}>
-                      <title>{d.quarter}: Distribution {formatCurrency(d.distribution, currency)}</title>
-                    </rect>
-                    <circle cx={x + barWidth / 2} cy={chartHeight - (d.net / maxVal) * (chartHeight / 2) - chartHeight / 2} r={4} fill="#2563eb" />
-                    <text x={x + barWidth / 2} y={chartHeight + 16} textAnchor="middle" fontSize={10} fill="#666" transform={`rotate(45, ${x + barWidth / 2}, ${chartHeight + 16})`}>{d.quarter}</text>
-                  </g>
-                );
-              })}
-              {data.length > 1 && (
-                <polyline
-                  points={data.map((d, i) => { const x = i * (barWidth + 16) + 20 + barWidth / 2; const y = chartHeight - (d.net / maxVal) * (chartHeight / 2) - chartHeight / 2; return `${x},${y}`; }).join(' ')}
-                  fill="none" stroke="#2563eb" strokeWidth={2} opacity={0.7}
-                />
-              )}
-              <line x1={0} y1={chartHeight} x2={data.length * (barWidth + 16) + 40} y2={chartHeight} stroke="#e5e7eb" strokeWidth={1} />
-            </svg>
-          </div>
-        </div>
-      );
-    }
-
-    // --- CashFlowTable ---
-    function CashFlowTable({ cashFlows, currency, onChange }) {
-      const addRow = () => {
-        const today = new Date().toISOString().slice(0, 10);
-        onChange([...cashFlows, { id: generateId(), date: today, quarter: quarterFromDate(today), type: 'drawdown', amount: 0, description: '' }]);
-      };
-      const updateRow = (id, partial) => {
-        onChange(cashFlows.map(cf => {
-          if (cf.id !== id) return cf;
-          const updated = { ...cf, ...partial };
-          if (partial.date) updated.quarter = quarterFromDate(partial.date);
-          return updated;
-        }));
-      };
-      const removeRow = (id) => onChange(cashFlows.filter(cf => cf.id !== id));
-      const sorted = [...cashFlows].sort((a, b) => a.date.localeCompare(b.date));
-      let cumDrawn = 0, cumDist = 0;
-
-      return (
-        <div className="panel">
-          <div className="table-header">
-            <h2>Kassaflöden</h2>
-            <button className="btn-sm" onClick={addRow}>+ Lägg till rad</button>
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Datum</th><th>Kvartal</th><th>Typ</th><th>Belopp</th>
-                  <th>Kum. drawdown</th><th>Kum. distribution</th><th>Beskrivning</th><th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {sorted.map(cf => {
-                  if (cf.type === 'drawdown') cumDrawn += cf.amount;
-                  else cumDist += cf.amount;
+          <div className="panel">
+            <h2>Kassaflödesprognos per år</h2>
+            <div className="legend">
+              <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns</span>
+              <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner</span>
+            </div>
+            <div className="chart-wrap">
+              <svg width={yearlyForecast.length * (barW + 12) + 60} height={chartHeight + 50}>
+                {yearlyForecast.map(([yr, v], i) => {
+                  const x = i * (barW + 12) + 30;
+                  const dH = (v.drawdown / maxVal) * chartHeight;
+                  const distH = (v.distribution / maxVal) * chartHeight;
+                  const isPast = parseInt(yr) <= currentYear;
                   return (
-                    <tr key={cf.id} className="row">
-                      <td><input type="date" className="cell-input" value={cf.date} onChange={e => updateRow(cf.id, { date: e.target.value })} /></td>
-                      <td className="td-muted">{cf.quarter}</td>
-                      <td>
-                        <select className="cell-input" value={cf.type} onChange={e => updateRow(cf.id, { type: e.target.value })}>
-                          <option value="drawdown">Drawdown</option>
-                          <option value="distribution">Distribution</option>
-                        </select>
-                      </td>
-                      <td><input type="number" className="cell-input" style={{ color: cf.type === 'drawdown' ? '#dc2626' : '#16a34a' }} value={cf.amount} onChange={e => updateRow(cf.id, { amount: parseFloat(e.target.value) || 0 })} /></td>
-                      <td className="td-number">{formatCurrency(cumDrawn, currency)}</td>
-                      <td className="td-number">{formatCurrency(cumDist, currency)}</td>
-                      <td><input className="cell-input" value={cf.description} onChange={e => updateRow(cf.id, { description: e.target.value })} placeholder="Valfri beskrivning" /></td>
-                      <td><button className="delete-btn" onClick={() => removeRow(cf.id)}>&times;</button></td>
-                    </tr>
+                    <g key={yr}>
+                      <rect x={x} y={chartHeight - dH} width={barW/2 - 1} height={dH} fill="#dc2626" opacity={isPast ? 0.9 : 0.4} rx={2}>
+                        <title>{yr}: Drawdown {fmt(v.drawdown, currency)}</title>
+                      </rect>
+                      <rect x={x + barW/2 + 1} y={chartHeight - distH} width={barW/2 - 1} height={distH} fill="#16a34a" opacity={isPast ? 0.9 : 0.4} rx={2}>
+                        <title>{yr}: Distribution {fmt(v.distribution, currency)}</title>
+                      </rect>
+                      <text x={x + barW/2} y={chartHeight + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={parseInt(yr) === currentYear ? 700 : 400}>{yr}</text>
+                    </g>
                   );
                 })}
-                {sorted.length === 0 && <tr><td colSpan={8} className="empty">Inga kassaflöden. Generera exempelflöden eller lägg till rader manuellt.</td></tr>}
-              </tbody>
-            </table>
+                <line x1={0} y1={chartHeight} x2={yearlyForecast.length * (barW + 12) + 60} y2={chartHeight} stroke="#e5e7eb" />
+              </svg>
+            </div>
           </div>
+
+          <div className="panel">
+            <h2>Alla fonder</h2>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fond</th><th>Kategori</th><th>Vintage</th><th style={{textAlign:'right'}}>Åtagande</th><th style={{textAlign:'right'}}>NAV</th><th style={{textAlign:'right'}}>TVPI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {funds.map(f => {
+                    let drawn = 0, dist = 0;
+                    for (const yr in f.drawdowns) { if (parseInt(yr) <= currentYear) drawn += f.drawdowns[yr]; }
+                    for (const yr in f.distributions) { if (parseInt(yr) <= currentYear) dist += f.distributions[yr]; }
+                    const pi = drawn || 1;
+                    const tvpi = (dist + f.nav) / pi;
+                    return (
+                      <tr key={f.id} className="row">
+                        <td style={{fontWeight:500}}>{f.name}</td>
+                        <td><span className="cat-color" style={{background:catColor(f.category)}} />{catLabel(f.category)}</td>
+                        <td>{f.vintageYear}</td>
+                        <td className="td-number">{fmtM(f.commitment, currency)}</td>
+                        <td className="td-number">{fmtM(f.nav, currency)}</td>
+                        <td className="td-number" style={{color: tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtPct(tvpi)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // --- Fund Detail ---
+    function FundDetail({ fund, onUpdate, onDelete }) {
+      const update = (partial) => onUpdate({ ...fund, ...partial });
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let y = fund.vintageYear; y < fund.vintageYear + fund.lifeYears; y++) years.push(y);
+
+      const updateForecast = (type, yr, val) => {
+        const map = { ...fund[type] };
+        map[yr] = parseFloat(val) || 0;
+        update({ [type]: map });
+      };
+
+      let drawn = 0, distributed = 0;
+      for (const yr in fund.drawdowns) { if (parseInt(yr) <= currentYear) drawn += fund.drawdowns[yr]; }
+      for (const yr in fund.distributions) { if (parseInt(yr) <= currentYear) distributed += fund.distributions[yr]; }
+      const paidIn = drawn || 1;
+
+      return (
+        <div>
+          <div className="panel">
+            <h2>
+              <span className="cat-color" style={{background: catColor(fund.category)}} />
+              {fund.name}
+            </h2>
+            <div className="grid">
+              <label>Fondnamn<input value={fund.name} onChange={e => update({name: e.target.value})} /></label>
+              <label>Kategori
+                <select value={fund.category} onChange={e => update({category: e.target.value})}>
+                  {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                </select>
+              </label>
+              <label>Vintage-år<input type="number" value={fund.vintageYear} onChange={e => update({vintageYear: parseInt(e.target.value) || 2020})} /></label>
+              <label>Åtagande<input type="number" value={fund.commitment} onChange={e => update({commitmentSize: parseFloat(e.target.value) || 0, commitment: parseFloat(e.target.value) || 0})} /></label>
+              <label>Fondlivslängd (år)<input type="number" min={1} max={25} value={fund.lifeYears} onChange={e => update({lifeYears: parseInt(e.target.value) || 10})} /></label>
+              <label>Nuvarande NAV<input type="number" value={fund.nav} onChange={e => update({nav: parseFloat(e.target.value) || 0})} /></label>
+              <label>Valuta
+                <select value={fund.currency} onChange={e => update({currency: e.target.value})}>
+                  <option value="SEK">SEK</option><option value="EUR">EUR</option><option value="USD">USD</option>
+                </select>
+              </label>
+            </div>
+            <div className="actions">
+              <button className="btn btn-danger" onClick={onDelete}>Ta bort fond</button>
+              <button className="btn-disabled" disabled title="Kommer snart">Importera drawdown-fil</button>
+            </div>
+          </div>
+
+          <div className="panel">
+            <h2>Nyckeltal</h2>
+            <div className="cards">
+              <div className="card"><div className="card-label">Åtagande</div><div className="card-value">{fmt(fund.commitment, fund.currency)}</div></div>
+              <div className="card"><div className="card-label">Indraget</div><div className="card-value">{fmt(drawn, fund.currency)}</div></div>
+              <div className="card"><div className="card-label">Distribuerat</div><div className="card-value" style={{color:'#16a34a'}}>{fmt(distributed, fund.currency)}</div></div>
+              <div className="card"><div className="card-label">NAV</div><div className="card-value">{fmt(fund.nav, fund.currency)}</div></div>
+              <div className="card"><div className="card-label">Ofonderat</div><div className="card-value">{fmt(fund.commitment - drawn, fund.currency)}</div></div>
+              <div className="card"><div className="card-label">DPI</div><div className="card-value">{fmtPct(distributed / paidIn)}</div></div>
+              <div className="card"><div className="card-label">TVPI</div><div className="card-value" style={{color:(distributed+fund.nav)/paidIn>=1?'#16a34a':'#dc2626'}}>{fmtPct((distributed + fund.nav) / paidIn)}</div></div>
+            </div>
+          </div>
+
+          <div className="panel">
+            <h2>Drawdown-prognos per år</h2>
+            <p style={{fontSize:12,color:'#888',marginBottom:12}}>Historiska år (t.o.m. {currentYear}) visas i mörkare ton. Framtida år är redigerbara prognoser.</p>
+            <div className="table-wrap">
+              <table>
+                <thead><tr><th>År</th>{years.map(y => <th key={y} style={{textAlign:'right', color: y <= currentYear ? '#333' : '#aaa'}}>{y}</th>)}</tr></thead>
+                <tbody>
+                  <tr className="row">
+                    <td style={{fontWeight:500, color:'#dc2626'}}>Drawdown</td>
+                    {years.map(y => (
+                      <td key={y} className="td-number">
+                        <input type="number" className="cell-input" style={{textAlign:'right', color:'#dc2626', background: y <= currentYear ? '#fef2f2' : '#fff'}}
+                          value={fund.drawdowns[y] || 0} onChange={e => updateForecast('drawdowns', y, e.target.value)} />
+                      </td>
+                    ))}
+                  </tr>
+                  <tr className="row">
+                    <td style={{fontWeight:500, color:'#16a34a'}}>Distribution</td>
+                    {years.map(y => (
+                      <td key={y} className="td-number">
+                        <input type="number" className="cell-input" style={{textAlign:'right', color:'#16a34a', background: y <= currentYear ? '#f0fdf4' : '#fff'}}
+                          value={fund.distributions[y] || 0} onChange={e => updateForecast('distributions', y, e.target.value)} />
+                      </td>
+                    ))}
+                  </tr>
+                  <tr className="row">
+                    <td style={{fontWeight:500, color:'#2563eb'}}>Netto</td>
+                    {years.map(y => {
+                      const net = (fund.distributions[y] || 0) - (fund.drawdowns[y] || 0);
+                      return <td key={y} className="td-number" style={{color: net >= 0 ? '#16a34a' : '#dc2626', fontSize:12}}>{fmt(net, fund.currency)}</td>;
+                    })}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Chart */}
+          {(() => {
+            const maxVal = Math.max(...years.map(y => Math.max(fund.drawdowns[y] || 0, fund.distributions[y] || 0)), 1);
+            const cH = 200;
+            const bW = Math.max(24, Math.min(45, 600 / years.length));
+            return (
+              <div className="panel">
+                <h2>Kassaflödesdiagram</h2>
+                <div className="legend">
+                  <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns</span>
+                  <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner</span>
+                </div>
+                <div className="chart-wrap">
+                  <svg width={years.length * (bW + 10) + 40} height={cH + 40}>
+                    {years.map((y, i) => {
+                      const x = i * (bW + 10) + 20;
+                      const dH = ((fund.drawdowns[y] || 0) / maxVal) * cH;
+                      const distH = ((fund.distributions[y] || 0) / maxVal) * cH;
+                      const isPast = y <= currentYear;
+                      return (
+                        <g key={y}>
+                          <rect x={x} y={cH - dH} width={bW/2 - 1} height={dH} fill="#dc2626" opacity={isPast ? 0.9 : 0.35} rx={2} />
+                          <rect x={x + bW/2 + 1} y={cH - distH} width={bW/2 - 1} height={distH} fill="#16a34a" opacity={isPast ? 0.9 : 0.35} rx={2} />
+                          <text x={x + bW/2} y={cH + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={y === currentYear ? 700 : 400}>{y}</text>
+                        </g>
+                      );
+                    })}
+                    <line x1={0} y1={cH} x2={years.length * (bW + 10) + 40} y2={cH} stroke="#e5e7eb" />
+                  </svg>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       );
     }
 
     // --- App ---
     function App() {
-      const [config, setConfig] = useState({
-        name: 'Nordic PE Fund I', vintageYear: 2020, commitmentSize: 100000000, fundLifeYears: 10, currency: 'SEK',
-      });
-      const [cashFlows, setCashFlows] = useState([]);
-      const [nav, setNav] = useState(0);
-      const metrics = useMemo(() => computeMetrics(config, cashFlows, nav), [config, cashFlows, nav]);
+      const [funds, setFunds] = useState([]);
+      const [selectedId, setSelectedId] = useState(null); // null = dashboard
+      const [currency] = useState('SEK');
 
-      const handleGenerate = () => {
-        const flows = createDefaultCashFlows(config);
-        setCashFlows(flows);
-        const totalDrawn = flows.filter(f => f.type === 'drawdown').reduce((s, f) => s + f.amount, 0);
-        setNav(Math.round(totalDrawn * 0.3));
+      const addFund = () => {
+        const n = funds.length + 1;
+        const cats = CATEGORIES.map(c => c.value);
+        const f = createFund(`Fond ${n}`, cats[n % cats.length], 50000000, 2021, 'SEK', 10);
+        setFunds([...funds, f]);
+        setSelectedId(f.id);
       };
+
+      const updateFund = (updated) => {
+        setFunds(funds.map(f => f.id === updated.id ? updated : f));
+      };
+
+      const deleteFund = (id) => {
+        setFunds(funds.filter(f => f.id !== id));
+        setSelectedId(null);
+      };
+
+      const addSamplePortfolio = () => {
+        const samples = [
+          createFund('Nordic Buyout VII', 'buyout', 150000000, 2019, 'SEK', 12),
+          createFund('Infra Partners III', 'infrastructure', 80000000, 2020, 'SEK', 15),
+          createFund('PropCo Real Estate II', 'real_estate', 60000000, 2021, 'SEK', 10),
+          createFund('Tech Ventures IV', 'venture', 40000000, 2022, 'SEK', 10),
+          createFund('Credit Opps Fund I', 'credit', 100000000, 2020, 'SEK', 8),
+          createFund('Secondary Fund V', 'secondaries', 70000000, 2023, 'SEK', 10),
+        ];
+        setFunds(samples);
+        setSelectedId(null);
+      };
+
+      const selected = funds.find(f => f.id === selectedId);
 
       return (
         <div>
-          <header><h1>PE Flow Simulator</h1><span>Simulera private equity-kassaflöden</span></header>
-          <main>
-            <FundConfigPanel config={config} onChange={setConfig} onGenerate={handleGenerate} />
-            <MetricsPanel metrics={metrics} currency={config.currency} nav={nav} onNavChange={setNav} />
-            <CashFlowChart cashFlows={cashFlows} currency={config.currency} />
-            <CashFlowTable cashFlows={cashFlows} currency={config.currency} onChange={setCashFlows} />
-          </main>
+          <header>
+            <h1>PE Portföljsimulator</h1>
+            <span>Simulera kassaflöden för din PE-portfölj</span>
+          </header>
+          <div className="layout">
+            <div className="sidebar">
+              <div style={{padding:'0 16px 8px', cursor:'pointer', fontSize:13, fontWeight: selectedId === null ? 600 : 400, color: selectedId === null ? '#2563eb' : '#333'}} onClick={() => setSelectedId(null)}>
+                Portföljöversikt
+              </div>
+              <h3>Fonder</h3>
+              {funds.map(f => (
+                <div key={f.id} className={`fund-item ${f.id === selectedId ? 'active' : ''}`} onClick={() => setSelectedId(f.id)}>
+                  <span>{f.name}</span>
+                  <span className="cat-badge" style={{background: catColor(f.category) + '22', color: catColor(f.category)}}>{catLabel(f.category)}</span>
+                </div>
+              ))}
+              <button className="sidebar-btn" onClick={addFund}>+ Lägg till fond</button>
+              {funds.length === 0 && (
+                <button className="sidebar-btn secondary" onClick={addSamplePortfolio}>Ladda exempelportfölj</button>
+              )}
+            </div>
+            <div className="main-content">
+              {selected ? (
+                <FundDetail fund={selected} onUpdate={updateFund} onDelete={() => deleteFund(selected.id)} />
+              ) : (
+                <PortfolioDashboard funds={funds} currency={currency} />
+              )}
+            </div>
+          </div>
         </div>
       );
     }
