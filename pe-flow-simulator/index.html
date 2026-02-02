@@ -486,6 +486,54 @@
         return { years: allYears, cats, data };
       }, [filtered, yearlyData, groupBy]);
 
+      // Estimated NAV per year per category (stacked area)
+      // Model: for each fund, NAV at end of year = cumulative drawn - cumulative distributed + unrealised gain
+      // Unrealised gain modeled as: remaining value grows linearly toward target TVPI
+      const navTimeline = useMemo(() => {
+        if (filtered.length === 0) return { years: [], cats: [], data: [], totals: [] };
+        // Find all years across funds
+        let minYr = Infinity, maxYr = -Infinity;
+        for (const f of filtered) {
+          minYr = Math.min(minYr, f.vintageYear);
+          maxYr = Math.max(maxYr, f.vintageYear + f.lifeYears - 1);
+        }
+        const years = [];
+        for (let y = minYr; y <= maxYr; y++) years.push(y);
+        const cats = [...new Set(filtered.map(f => f.category))].sort();
+
+        const data = years.map(yr => {
+          const row = { year: yr, total: 0 };
+          for (const cat of cats) row[cat] = 0;
+
+          for (const f of filtered) {
+            // Cumulative drawdown and distribution up to this year
+            let cumDD = 0, cumDist = 0, totalDD = 0, totalDist = 0;
+            for (const y in f.drawdowns) { totalDD += f.drawdowns[y] || 0; if (parseInt(y) <= yr) cumDD += f.drawdowns[y] || 0; }
+            for (const y in f.distributions) { totalDist += f.distributions[y] || 0; if (parseInt(y) <= yr) cumDist += f.distributions[y] || 0; }
+
+            if (cumDD === 0) continue; // fund not started yet
+
+            // Model NAV: invested capital grows toward target, minus what's been distributed
+            const fundAge = yr - f.vintageYear;
+            const fundLife = f.lifeYears;
+            // Growth factor: linear interpolation from 1.0 to targetTvpi over fund life
+            const progress = Math.min(fundAge / fundLife, 1);
+            const growthMultiple = 1 + (f.targetTvpi - 1) * progress;
+            // Estimated total value = cumDD * growthMultiple
+            // Estimated NAV = total value - cumDist (but floor at 0)
+            const estNav = Math.max(0, cumDD * growthMultiple - cumDist);
+
+            row[f.category] += estNav;
+            row.total += estNav;
+          }
+          return row;
+        });
+
+        // Totals per year
+        const totals = data.map(d => d.total);
+        return { years, cats, data, totals };
+      }, [filtered]);
+
       if (funds.length === 0) {
         return <div className="panel"><h2>Analys</h2><div className="empty">Lägg till fonder för att se analyser.</div></div>;
       }
@@ -604,6 +652,122 @@
               </table>
             </div>
           </div>
+
+          {/* NAV timeline stacked area */}
+          {navTimeline.years.length > 0 && (() => {
+            const { years: navYears, cats: navCats, data: navData, totals: navTotals } = navTimeline;
+            const navMax = Math.max(...navTotals, 1);
+            const areaH = 260;
+            const leftPad = 70;
+            const rightPad = 20;
+            const areaW = Math.max(600, navYears.length * 45);
+            const totalW = leftPad + areaW + rightPad;
+            const xScale = (i) => leftPad + (i / (navYears.length - 1 || 1)) * areaW;
+            const yScale = (v) => areaH - (v / navMax) * (areaH - 20);
+
+            // Build stacked paths per category
+            const sortedCats = [...navCats].sort();
+            const catPaths = sortedCats.map((cat, ci) => {
+              // Bottom = sum of categories below this one
+              const bottomPoints = navData.map((d, i) => {
+                let below = 0;
+                for (let j = 0; j < ci; j++) below += d[sortedCats[j]] || 0;
+                return { x: xScale(i), y: yScale(below) };
+              });
+              // Top = bottom + this category
+              const topPoints = navData.map((d, i) => {
+                let below = 0;
+                for (let j = 0; j <= ci; j++) below += d[sortedCats[j]] || 0;
+                return { x: xScale(i), y: yScale(below) };
+              });
+              // Path: go right along top, then left along bottom
+              const pathD = topPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ')
+                + ' ' + [...bottomPoints].reverse().map((p, i) => `${i === 0 ? 'L' : 'L'}${p.x},${p.y}`).join(' ') + ' Z';
+              return { cat, pathD, color: catColor(cat) };
+            });
+
+            // Y-axis labels
+            const yTicks = [0, 0.25, 0.5, 0.75, 1].map(pct => ({ val: navMax * pct, y: yScale(navMax * pct) }));
+
+            // Find current year index
+            const cyIdx = navYears.indexOf(CY);
+
+            return (
+              <div className="panel">
+                <h2>Portföljvärde (estimerat NAV) per år och kategori</h2>
+                <p className="hint">
+                  Visar hur portföljens totala estimerade marknadsvärde utvecklas över tid, uppdelat per kategori.
+                  Historiskt (t.o.m. {CY}) baserat på inbetalningar och utbetalningar. Framåt baserat på prognoser och mål-TVPI.
+                </p>
+                <div className="legend">
+                  {sortedCats.map(cat => (
+                    <span key={cat} className="legend-item"><span className="dot" style={{background: catColor(cat)}} /> {catLabel(cat)}</span>
+                  ))}
+                </div>
+                <div className="chart-wrap">
+                  <svg width={totalW} height={areaH + 45}>
+                    {/* Y gridlines */}
+                    {yTicks.map(t => (
+                      <g key={t.val}>
+                        <line x1={leftPad} y1={t.y} x2={totalW - rightPad} y2={t.y} stroke="#f0f0f0" />
+                        <text x={leftPad - 6} y={t.y + 4} textAnchor="end" fontSize={10} fill="#999">{fmtM(t.val, currency)}</text>
+                      </g>
+                    ))}
+                    {/* Stacked areas */}
+                    {catPaths.map(cp => (
+                      <path key={cp.cat} d={cp.pathD} fill={cp.color} opacity={0.6} />
+                    ))}
+                    {/* Total line on top */}
+                    <polyline
+                      points={navData.map((d, i) => `${xScale(i)},${yScale(d.total)}`).join(' ')}
+                      fill="none" stroke="#333" strokeWidth={2} opacity={0.7}
+                    />
+                    {/* Current year marker */}
+                    {cyIdx >= 0 && (
+                      <line x1={xScale(cyIdx)} y1={0} x2={xScale(cyIdx)} y2={areaH} stroke="#2563eb" strokeWidth={1.5} strokeDasharray="4" opacity={0.6} />
+                    )}
+                    {cyIdx >= 0 && (
+                      <text x={xScale(cyIdx)} y={-2} textAnchor="middle" fontSize={10} fill="#2563eb" fontWeight={600}>Idag</text>
+                    )}
+                    {/* X-axis year labels */}
+                    {navYears.map((yr, i) => (
+                      <text key={yr} x={xScale(i)} y={areaH + 14} textAnchor="middle" fontSize={10}
+                        fill={yr <= CY ? '#333' : '#aaa'} fontWeight={yr === CY ? 700 : 400}>{yr}</text>
+                    ))}
+                    {/* Hover dots for total */}
+                    {navData.map((d, i) => (
+                      <circle key={d.year} cx={xScale(i)} cy={yScale(d.total)} r={3} fill="#333" opacity={0.5}>
+                        <title>{d.year}: Totalt {fmtM(d.total, currency)}{sortedCats.map(cat => `\n  ${catLabel(cat)}: ${fmtM(d[cat] || 0, currency)}`).join('')}</title>
+                      </circle>
+                    ))}
+                    {/* Baseline */}
+                    <line x1={leftPad} y1={areaH} x2={totalW - rightPad} y2={areaH} stroke="#ccc" />
+                  </svg>
+                </div>
+                {/* Summary table below chart */}
+                <div className="table-wrap" style={{marginTop:16}}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>År</th>
+                        {sortedCats.map(cat => <th key={cat} style={{textAlign:'right'}}><span className="cat-color" style={{background:catColor(cat)}} />{catLabel(cat)}</th>)}
+                        <th style={{textAlign:'right', fontWeight:700}}>Totalt</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {navData.filter((d, i) => i % Math.max(1, Math.floor(navYears.length / 8)) === 0 || d.year === CY || i === navData.length - 1).map(d => (
+                        <tr key={d.year} className="row" style={{fontWeight: d.year === CY ? 600 : 400}}>
+                          <td>{d.year}{d.year === CY ? ' (idag)' : ''}</td>
+                          {sortedCats.map(cat => <td key={cat} className="td-number">{fmtM(d[cat] || 0, currency)}</td>)}
+                          <td className="td-number" style={{fontWeight:600}}>{fmtM(d.total, currency)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Yearly chart */}
           <div className="panel">
