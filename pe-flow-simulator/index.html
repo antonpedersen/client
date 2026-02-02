@@ -7,6 +7,7 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; color: #111; }
@@ -940,6 +941,142 @@
       );
     }
 
+    // ========== EXCEL EXPORT ==========
+    function exportToExcel(funds, currency) {
+      const wb = XLSX.utils.book_new();
+
+      // --- Sheet 1: Fund overview ---
+      const overviewRows = funds.map(f => {
+        const m = fundMetrics(f);
+        return {
+          'Fond': f.name,
+          'Kategori': catLabel(f.category),
+          'Vintage': f.vintageYear,
+          'Valuta': f.currency,
+          'Fondlivslängd': f.lifeYears,
+          'Åtagande': f.commitment,
+          'Indraget': m.drawn,
+          'Utbetalt': m.dist,
+          'NAV': f.nav,
+          'Ofonderat': m.unfunded,
+          'Mål-TVPI': f.targetTvpi,
+          'Aktuell TVPI': Math.round(m.tvpiActual * 100) / 100,
+          'DPI': Math.round(m.dpi * 100) / 100,
+          'RVPI': Math.round(m.rvpi * 100) / 100,
+          'Återbetalningsprofil': (DIST_PROFILES[f.distProfile] || {}).label || f.distProfile,
+        };
+      });
+      const ws1 = XLSX.utils.json_to_sheet(overviewRows);
+      ws1['!cols'] = [{ wch: 25 }, { wch: 18 }, { wch: 8 }, { wch: 6 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 10 }, { wch: 12 }, { wch: 8 }, { wch: 8 }, { wch: 20 }];
+      XLSX.utils.book_append_sheet(wb, ws1, 'Fondöversikt');
+
+      // --- Sheet 2: Drawdowns per year ---
+      const allYears = new Set();
+      for (const f of funds) { for (const yr in f.drawdowns) allYears.add(parseInt(yr)); for (const yr in f.distributions) allYears.add(parseInt(yr)); }
+      const years = [...allYears].sort();
+
+      const ddRows = funds.map(f => {
+        const row = { 'Fond': f.name, 'Kategori': catLabel(f.category) };
+        let total = 0;
+        for (const yr of years) { const v = f.drawdowns[yr] || 0; row[String(yr)] = v; total += v; }
+        row['Totalt'] = total;
+        return row;
+      });
+      const ws2 = XLSX.utils.json_to_sheet(ddRows);
+      XLSX.utils.book_append_sheet(wb, ws2, 'Drawdowns');
+
+      // --- Sheet 3: Distributions per year ---
+      const distRows = funds.map(f => {
+        const row = { 'Fond': f.name, 'Kategori': catLabel(f.category) };
+        let total = 0;
+        for (const yr of years) { const v = f.distributions[yr] || 0; row[String(yr)] = v; total += v; }
+        row['Totalt'] = total;
+        return row;
+      });
+      const ws3 = XLSX.utils.json_to_sheet(distRows);
+      XLSX.utils.book_append_sheet(wb, ws3, 'Distributioner');
+
+      // --- Sheet 4: Net cash flow per year ---
+      const netRows = funds.map(f => {
+        const row = { 'Fond': f.name, 'Kategori': catLabel(f.category) };
+        let total = 0;
+        for (const yr of years) { const v = (f.distributions[yr] || 0) - (f.drawdowns[yr] || 0); row[String(yr)] = v; total += v; }
+        row['Totalt'] = total;
+        return row;
+      });
+      // Add total row
+      const totalNet = { 'Fond': 'TOTALT', 'Kategori': '' };
+      let grandTotal = 0;
+      for (const yr of years) {
+        let sum = 0;
+        for (const f of funds) sum += (f.distributions[yr] || 0) - (f.drawdowns[yr] || 0);
+        totalNet[String(yr)] = sum;
+        grandTotal += sum;
+      }
+      totalNet['Totalt'] = grandTotal;
+      netRows.push(totalNet);
+      const ws4 = XLSX.utils.json_to_sheet(netRows);
+      XLSX.utils.book_append_sheet(wb, ws4, 'Netto kassaflöde');
+
+      // --- Sheet 5: Estimated NAV timeline ---
+      const navRows = [];
+      let minYr = Infinity, maxYr = -Infinity;
+      for (const f of funds) { minYr = Math.min(minYr, f.vintageYear); maxYr = Math.max(maxYr, f.vintageYear + f.lifeYears - 1); }
+      const navYears = [];
+      for (let y = minYr; y <= maxYr; y++) navYears.push(y);
+      const cats = [...new Set(funds.map(f => f.category))].sort();
+
+      for (const yr of navYears) {
+        const row = { 'År': yr };
+        let total = 0;
+        for (const cat of cats) {
+          let catNav = 0;
+          for (const f of funds) {
+            if (f.category !== cat) continue;
+            let cumDD = 0, cumDist = 0;
+            for (const y in f.drawdowns) { if (parseInt(y) <= yr) cumDD += f.drawdowns[y] || 0; }
+            for (const y in f.distributions) { if (parseInt(y) <= yr) cumDist += f.distributions[y] || 0; }
+            if (cumDD === 0) continue;
+            const progress = Math.min((yr - f.vintageYear) / f.lifeYears, 1);
+            const growthMultiple = 1 + (f.targetTvpi - 1) * progress;
+            catNav += Math.max(0, cumDD * growthMultiple - cumDist);
+          }
+          row[catLabel(cat)] = Math.round(catNav);
+          total += catNav;
+        }
+        row['Totalt'] = Math.round(total);
+        navRows.push(row);
+      }
+      const ws5 = XLSX.utils.json_to_sheet(navRows);
+      XLSX.utils.book_append_sheet(wb, ws5, 'NAV-tidslinje');
+
+      // --- Sheet 6: Category summary ---
+      const catMap = {};
+      for (const f of funds) {
+        if (!catMap[f.category]) catMap[f.category] = { commitment: 0, nav: 0, drawn: 0, dist: 0, count: 0 };
+        const m = fundMetrics(f);
+        catMap[f.category].commitment += f.commitment;
+        catMap[f.category].nav += f.nav;
+        catMap[f.category].drawn += m.drawn;
+        catMap[f.category].dist += m.dist;
+        catMap[f.category].count++;
+      }
+      const catRows = Object.entries(catMap).map(([cat, d]) => ({
+        'Kategori': catLabel(cat),
+        'Antal fonder': d.count,
+        'Åtagande': d.commitment,
+        'Indraget': d.drawn,
+        'Utbetalt': d.dist,
+        'NAV': d.nav,
+        'DPI': Math.round((d.dist / (d.drawn || 1)) * 100) / 100,
+        'TVPI': Math.round(((d.dist + d.nav) / (d.drawn || 1)) * 100) / 100,
+      }));
+      const ws6 = XLSX.utils.json_to_sheet(catRows);
+      XLSX.utils.book_append_sheet(wb, ws6, 'Per kategori');
+
+      XLSX.writeFile(wb, `PE_Portfolio_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    }
+
     // ========== APP ==========
     function App() {
       const [funds, setFunds] = useState([]);
@@ -996,6 +1133,9 @@
                 </div>
               ))}
               <button className="sidebar-btn" onClick={addFund}>+ Lägg till fond</button>
+              {funds.length > 0 && (
+                <button className="sidebar-btn secondary" onClick={() => exportToExcel(funds, currency)}>Exportera till Excel</button>
+              )}
               {funds.length === 0 && (
                 <button className="sidebar-btn secondary" onClick={addSamplePortfolio}>Ladda exempelportfölj</button>
               )}
