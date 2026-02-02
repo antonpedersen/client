@@ -19,63 +19,74 @@
     .fund-item { padding: 10px 16px; cursor: pointer; font-size: 13px; border-left: 3px solid transparent; display: flex; justify-content: space-between; align-items: center; }
     .fund-item:hover { background: #f9fafb; }
     .fund-item.active { background: #eff6ff; border-left-color: #2563eb; font-weight: 600; }
-    .fund-item .cat-badge { font-size: 10px; background: #e5e7eb; color: #555; padding: 2px 6px; border-radius: 8px; font-weight: 400; }
+    .fund-item .cat-badge { font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 400; }
     .sidebar-btn { width: calc(100% - 32px); margin: 8px 16px; padding: 8px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; }
     .sidebar-btn:hover { background: #1d4ed8; }
     .sidebar-btn.secondary { background: #f3f4f6; color: #555; border: 1px solid #ddd; }
     .sidebar-btn.secondary:hover { background: #e5e7eb; }
-    .main-content { flex: 1; padding: 24px; overflow-y: auto; }
+    .nav-item { padding: 10px 16px; cursor: pointer; font-size: 13px; border-left: 3px solid transparent; }
+    .nav-item:hover { background: #f9fafb; }
+    .nav-item.active { background: #eff6ff; border-left-color: #2563eb; font-weight: 600; color: #2563eb; }
+    .main-content { flex: 1; padding: 24px; overflow-y: auto; max-height: calc(100vh - 56px); }
     .panel { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
     .panel h2 { font-size: 17px; font-weight: 600; margin: 0 0 16px; }
+    .panel h3 { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: #333; }
+    .hint { font-size: 12px; color: #888; margin: -8px 0 12px; line-height: 1.5; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
     .grid label { display: flex; flex-direction: column; font-size: 12px; font-weight: 500; color: #555; gap: 4px; }
     .grid label input, .grid label select { padding: 7px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .grid label .field-hint { font-size: 11px; color: #999; font-weight: 400; margin-top: 2px; }
     .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
     .btn { padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
     .btn:hover { background: #1d4ed8; }
+    .btn-secondary { padding: 8px 16px; background: #f3f4f6; color: #555; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .btn-secondary:hover { background: #e5e7eb; }
     .btn-danger { background: #dc2626; }
     .btn-danger:hover { background: #b91c1c; }
     .btn-disabled { padding: 8px 16px; background: #f3f4f6; color: #888; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; cursor: not-allowed; }
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-    .card { padding: 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; }
+    .card { padding: 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; position: relative; }
     .card-label { font-size: 11px; color: #666; margin-bottom: 2px; }
     .card-value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .table-header h2 { margin: 0; }
-    .btn-sm { padding: 5px 12px; background: #2563eb; color: #fff; border: none; border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .card-hint { font-size: 10px; color: #999; margin-top: 2px; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     th { text-align: left; padding: 7px 6px; border-bottom: 2px solid #e5e7eb; font-weight: 600; font-size: 11px; color: #666; white-space: nowrap; }
     td { padding: 5px 6px; }
     tr.row { border-bottom: 1px solid #f3f4f6; }
     .cell-input { padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 3px; font-size: 12px; width: 100%; }
-    .td-muted { color: #888; font-size: 11px; }
     .td-number { font-variant-numeric: tabular-nums; text-align: right; padding: 5px 6px; }
     .delete-btn { background: none; border: none; color: #dc2626; font-size: 16px; cursor: pointer; padding: 2px 6px; }
     .empty { text-align: center; padding: 24px; color: #888; font-size: 13px; }
     .cat-color { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-    .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; }
-    .tab { padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: #666; background: none; border-top: none; border-left: none; border-right: none; }
-    .tab.active { color: #2563eb; border-bottom-color: #2563eb; }
     .chart-wrap { overflow-x: auto; }
     .legend { display: flex; gap: 16px; margin-bottom: 12px; font-size: 12px; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 5px; }
     .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-    .forecast-row { display: grid; grid-template-columns: 80px repeat(auto-fill, minmax(80px, 1fr)); gap: 4px; align-items: center; margin-bottom: 4px; }
-    .forecast-row span { font-size: 12px; color: #555; font-weight: 500; }
-    .forecast-row input { padding: 4px 6px; border: 1px solid #e5e7eb; border-radius: 3px; font-size: 12px; width: 100%; }
-    .section-title { font-size: 13px; font-weight: 600; color: #444; margin: 16px 0 8px; }
-    .cat-summary { display: flex; gap: 8px; align-items: center; padding: 10px 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; margin-bottom: 8px; }
+    .cat-summary { display: flex; gap: 8px; align-items: center; padding: 10px 14px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6; margin-bottom: 8px; cursor: pointer; }
+    .cat-summary:hover { background: #f3f4f6; }
     .cat-summary-name { font-size: 13px; font-weight: 600; flex: 1; }
-    .cat-summary-val { font-size: 12px; color: #555; min-width: 100px; text-align: right; }
+    .cat-summary-val { font-size: 12px; color: #555; min-width: 90px; text-align: right; }
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+    .filter-bar label { font-size: 12px; color: #555; display: flex; align-items: center; gap: 6px; }
+    .filter-bar select, .filter-bar input { padding: 5px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
+    .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; cursor: pointer; border: 1px solid transparent; }
+    .chip.active { border-color: currentColor; }
+    .chip.inactive { opacity: 0.4; }
+    .profile-selector { display: flex; gap: 8px; margin: 8px 0 16px; flex-wrap: wrap; }
+    .profile-opt { padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; cursor: pointer; background: #fff; }
+    .profile-opt:hover { background: #f9fafb; }
+    .profile-opt.active { border-color: #2563eb; background: #eff6ff; color: #2563eb; font-weight: 500; }
+    .stacked-bar { display: flex; height: 24px; border-radius: 4px; overflow: hidden; margin: 4px 0; }
+    .stacked-bar div { transition: width 0.3s; }
+    .info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; line-height: 1.6; color: #1e40af; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useMemo, useCallback } = React;
+    const { useState, useMemo } = React;
 
-    // --- Constants ---
     const CATEGORIES = [
       { value: 'buyout', label: 'Buyout', color: '#2563eb' },
       { value: 'venture', label: 'Venture Capital', color: '#7c3aed' },
@@ -86,10 +97,17 @@
       { value: 'other', label: 'Övrigt', color: '#6b7280' },
     ];
 
+    // Distribution profiles: how returns are spread across fund life
+    const DIST_PROFILES = {
+      early: { label: 'Tidiga exits', desc: 'Fonden säljer innehav tidigt, pengar tillbaka snabbare', weights: [0, 0, 0.05, 0.15, 0.25, 0.25, 0.15, 0.10, 0.05, 0, 0, 0] },
+      standard: { label: 'Standard', desc: 'Typisk PE-fond, exits koncentrerade år 5-8', weights: [0, 0, 0, 0.05, 0.10, 0.20, 0.25, 0.20, 0.10, 0.05, 0.03, 0.02] },
+      late: { label: 'Sena exits', desc: 'Fonden behåller innehav längre, pengar tillbaka sent', weights: [0, 0, 0, 0, 0.03, 0.07, 0.10, 0.15, 0.20, 0.20, 0.15, 0.10] },
+      even: { label: 'Jämn fördelning', desc: 'Löpande avyttringar jämnt fördelade', weights: [0, 0, 0, 0.08, 0.10, 0.12, 0.14, 0.14, 0.14, 0.12, 0.10, 0.06] },
+    };
+
     function catColor(cat) { return (CATEGORIES.find(c => c.value === cat) || CATEGORIES[6]).color; }
     function catLabel(cat) { return (CATEGORIES.find(c => c.value === cat) || CATEGORIES[6]).label; }
 
-    // --- Utils ---
     let idCounter = 0;
     function gid() { return `f-${++idCounter}-${Date.now()}`; }
 
@@ -98,215 +116,100 @@
     }
     function fmtM(value, currency) {
       const m = value / 1e6;
-      return `${m.toFixed(1)} M ${currency}`;
+      return `${m.toFixed(1)}M ${currency}`;
     }
     function fmtPct(v) { return `${(v * 100).toFixed(1)}%`; }
+    function fmtX(v) { return `${v.toFixed(2)}x`; }
 
-    function createFund(name, category, commitment, vintageYear, currency, lifeYears) {
-      const id = gid();
-      const currentYear = new Date().getFullYear();
-      const drawdowns = {};
-      const distributions = {};
-      // Default drawdown curve
-      const ddPcts = [0.15, 0.25, 0.20, 0.15, 0.10, 0.08, 0.05, 0.02];
+    const CY = new Date().getFullYear();
+
+    // Compute distributions from target TVPI + profile
+    function computeDistributions(fund) {
+      const { commitment, vintageYear, lifeYears, targetTvpi, distProfile, drawdowns } = fund;
+      const profile = DIST_PROFILES[distProfile] || DIST_PROFILES.standard;
+      // Total expected drawdown
+      let totalDD = 0;
+      for (const yr in drawdowns) totalDD += drawdowns[yr] || 0;
+      // Total expected distribution = totalDD * targetTvpi (minus final NAV kept = 0 for simplicity)
+      const totalDist = totalDD * targetTvpi;
+      // Spread distributions over years using profile weights
+      const dists = {};
+      let usedWeight = 0;
+      for (let i = 0; i < lifeYears; i++) {
+        const w = profile.weights[i] || 0;
+        usedWeight += w;
+      }
+      const scale = usedWeight > 0 ? 1 / usedWeight : 1;
       for (let i = 0; i < lifeYears; i++) {
         const yr = vintageYear + i;
-        drawdowns[yr] = Math.round(commitment * (ddPcts[i] || 0));
-        // Distributions start around year 4-5
-        if (i >= 4) {
-          const pct = 0.05 + (i - 4) * 0.10;
-          distributions[yr] = Math.round(commitment * pct);
-        } else {
-          distributions[yr] = 0;
-        }
+        const w = (profile.weights[i] || 0) * scale;
+        dists[yr] = Math.round(totalDist * w);
       }
-      // Calculate drawn so far
-      let drawn = 0;
-      let distributed = 0;
-      for (let yr = vintageYear; yr <= currentYear; yr++) {
-        drawn += drawdowns[yr] || 0;
-        distributed += distributions[yr] || 0;
+      return dists;
+    }
+
+    function createFund(name, category, commitment, vintageYear, currency, lifeYears, targetTvpi, distProfile) {
+      const id = gid();
+      const drawdowns = {};
+      const ddPcts = [0.15, 0.25, 0.20, 0.15, 0.10, 0.08, 0.05, 0.02];
+      for (let i = 0; i < lifeYears; i++) {
+        drawdowns[vintageYear + i] = Math.round(commitment * (ddPcts[i] || 0));
       }
+      const fund = { id, name, category, commitment, vintageYear, currency, lifeYears, targetTvpi: targetTvpi || 1.7, distProfile: distProfile || 'standard', drawdowns, distributions: {} };
+      fund.distributions = computeDistributions(fund);
+      // NAV = drawn to date * some factor - distributed to date
+      let drawn = 0, dist = 0;
+      for (let yr = vintageYear; yr <= CY; yr++) { drawn += drawdowns[yr] || 0; dist += fund.distributions[yr] || 0; }
+      fund.nav = Math.max(0, Math.round(drawn * 1.15 - dist));
+      return fund;
+    }
+
+    // Compute fund-level metrics
+    function fundMetrics(fund) {
+      let drawn = 0, totalDD = 0, dist = 0, totalDist = 0;
+      for (const yr in fund.drawdowns) {
+        totalDD += fund.drawdowns[yr] || 0;
+        if (parseInt(yr) <= CY) drawn += fund.drawdowns[yr] || 0;
+      }
+      for (const yr in fund.distributions) {
+        totalDist += fund.distributions[yr] || 0;
+        if (parseInt(yr) <= CY) dist += fund.distributions[yr] || 0;
+      }
+      const pi = drawn || 1;
       return {
-        id, name, category, commitment, vintageYear, currency, lifeYears,
-        nav: Math.round(drawn * 1.1 - distributed),
-        drawdowns, distributions,
+        drawn, totalDD, dist, totalDist,
+        unfunded: fund.commitment - drawn,
+        dpi: dist / pi,
+        rvpi: fund.nav / pi,
+        tvpiActual: (dist + fund.nav) / pi,
+        tvpiTarget: fund.targetTvpi,
       };
     }
 
-    // --- Portfolio Dashboard ---
-    function PortfolioDashboard({ funds, currency }) {
-      const currentYear = new Date().getFullYear();
-      const totals = useMemo(() => {
-        let commitment = 0, nav = 0, drawn = 0, distributed = 0;
-        for (const f of funds) {
-          commitment += f.commitment;
-          nav += f.nav;
-          for (const yr in f.drawdowns) { if (parseInt(yr) <= currentYear) drawn += f.drawdowns[yr]; }
-          for (const yr in f.distributions) { if (parseInt(yr) <= currentYear) distributed += f.distributions[yr]; }
-        }
-        const paidIn = drawn || 1;
-        return { commitment, nav, drawn, distributed, unfunded: commitment - drawn, dpi: distributed / paidIn, tvpi: (distributed + nav) / paidIn };
-      }, [funds, currentYear]);
-
-      // Category breakdown
-      const catBreakdown = useMemo(() => {
-        const map = {};
-        for (const f of funds) {
-          if (!map[f.category]) map[f.category] = { commitment: 0, nav: 0, count: 0 };
-          map[f.category].commitment += f.commitment;
-          map[f.category].nav += f.nav;
-          map[f.category].count++;
-        }
-        return Object.entries(map).sort((a, b) => b[1].commitment - a[1].commitment);
-      }, [funds]);
-
-      // Yearly forecast
-      const yearlyForecast = useMemo(() => {
-        const years = {};
-        for (const f of funds) {
-          for (const yr in f.drawdowns) {
-            if (!years[yr]) years[yr] = { drawdown: 0, distribution: 0 };
-            years[yr].drawdown += f.drawdowns[yr];
-          }
-          for (const yr in f.distributions) {
-            if (!years[yr]) years[yr] = { drawdown: 0, distribution: 0 };
-            years[yr].distribution += f.distributions[yr];
-          }
-        }
-        return Object.entries(years).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
-      }, [funds]);
-
-      if (funds.length === 0) {
-        return (
-          <div className="panel">
-            <h2>Portföljöversikt</h2>
-            <div className="empty">Lägg till fonder med knappen i sidomenyn för att börja.</div>
-          </div>
-        );
-      }
-
-      const chartHeight = 220;
-      const maxVal = Math.max(...yearlyForecast.map(([, v]) => Math.max(v.drawdown, v.distribution)), 1);
-      const barW = Math.max(24, Math.min(50, 700 / yearlyForecast.length));
-
-      return (
-        <div>
-          <div className="panel">
-            <h2>Portföljöversikt — {funds.length} fonder</h2>
-            <div className="cards">
-              <div className="card"><div className="card-label">Totalt åtagande</div><div className="card-value">{fmtM(totals.commitment, currency)}</div></div>
-              <div className="card"><div className="card-label">Totalt indraget</div><div className="card-value">{fmtM(totals.drawn, currency)}</div></div>
-              <div className="card"><div className="card-label">Totalt distribuerat</div><div className="card-value" style={{color:'#16a34a'}}>{fmtM(totals.distributed, currency)}</div></div>
-              <div className="card"><div className="card-label">Totalt NAV</div><div className="card-value">{fmtM(totals.nav, currency)}</div></div>
-              <div className="card"><div className="card-label">Ofonderat</div><div className="card-value">{fmtM(totals.unfunded, currency)}</div></div>
-              <div className="card"><div className="card-label">DPI</div><div className="card-value">{fmtPct(totals.dpi)}</div></div>
-              <div className="card"><div className="card-label">TVPI</div><div className="card-value" style={{color: totals.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtPct(totals.tvpi)}</div></div>
-            </div>
-          </div>
-
-          <div className="panel">
-            <h2>Per kategori</h2>
-            {catBreakdown.map(([cat, data]) => (
-              <div key={cat} className="cat-summary">
-                <span className="cat-color" style={{background: catColor(cat)}} />
-                <span className="cat-summary-name">{catLabel(cat)} ({data.count})</span>
-                <span className="cat-summary-val">Åtagande: {fmtM(data.commitment, currency)}</span>
-                <span className="cat-summary-val">NAV: {fmtM(data.nav, currency)}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="panel">
-            <h2>Kassaflödesprognos per år</h2>
-            <div className="legend">
-              <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns</span>
-              <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner</span>
-            </div>
-            <div className="chart-wrap">
-              <svg width={yearlyForecast.length * (barW + 12) + 60} height={chartHeight + 50}>
-                {yearlyForecast.map(([yr, v], i) => {
-                  const x = i * (barW + 12) + 30;
-                  const dH = (v.drawdown / maxVal) * chartHeight;
-                  const distH = (v.distribution / maxVal) * chartHeight;
-                  const isPast = parseInt(yr) <= currentYear;
-                  return (
-                    <g key={yr}>
-                      <rect x={x} y={chartHeight - dH} width={barW/2 - 1} height={dH} fill="#dc2626" opacity={isPast ? 0.9 : 0.4} rx={2}>
-                        <title>{yr}: Drawdown {fmt(v.drawdown, currency)}</title>
-                      </rect>
-                      <rect x={x + barW/2 + 1} y={chartHeight - distH} width={barW/2 - 1} height={distH} fill="#16a34a" opacity={isPast ? 0.9 : 0.4} rx={2}>
-                        <title>{yr}: Distribution {fmt(v.distribution, currency)}</title>
-                      </rect>
-                      <text x={x + barW/2} y={chartHeight + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={parseInt(yr) === currentYear ? 700 : 400}>{yr}</text>
-                    </g>
-                  );
-                })}
-                <line x1={0} y1={chartHeight} x2={yearlyForecast.length * (barW + 12) + 60} y2={chartHeight} stroke="#e5e7eb" />
-              </svg>
-            </div>
-          </div>
-
-          <div className="panel">
-            <h2>Alla fonder</h2>
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Fond</th><th>Kategori</th><th>Vintage</th><th style={{textAlign:'right'}}>Åtagande</th><th style={{textAlign:'right'}}>NAV</th><th style={{textAlign:'right'}}>TVPI</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {funds.map(f => {
-                    let drawn = 0, dist = 0;
-                    for (const yr in f.drawdowns) { if (parseInt(yr) <= currentYear) drawn += f.drawdowns[yr]; }
-                    for (const yr in f.distributions) { if (parseInt(yr) <= currentYear) dist += f.distributions[yr]; }
-                    const pi = drawn || 1;
-                    const tvpi = (dist + f.nav) / pi;
-                    return (
-                      <tr key={f.id} className="row">
-                        <td style={{fontWeight:500}}>{f.name}</td>
-                        <td><span className="cat-color" style={{background:catColor(f.category)}} />{catLabel(f.category)}</td>
-                        <td>{f.vintageYear}</td>
-                        <td className="td-number">{fmtM(f.commitment, currency)}</td>
-                        <td className="td-number">{fmtM(f.nav, currency)}</td>
-                        <td className="td-number" style={{color: tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtPct(tvpi)}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // --- Fund Detail ---
+    // ========== FUND DETAIL ==========
     function FundDetail({ fund, onUpdate, onDelete }) {
       const update = (partial) => onUpdate({ ...fund, ...partial });
-      const currentYear = new Date().getFullYear();
+      const updateAndRecompute = (partial) => {
+        const updated = { ...fund, ...partial };
+        updated.distributions = computeDistributions(updated);
+        onUpdate(updated);
+      };
       const years = [];
       for (let y = fund.vintageYear; y < fund.vintageYear + fund.lifeYears; y++) years.push(y);
 
-      const updateForecast = (type, yr, val) => {
-        const map = { ...fund[type] };
-        map[yr] = parseFloat(val) || 0;
-        update({ [type]: map });
+      const updateDD = (yr, val) => {
+        const dd = { ...fund.drawdowns, [yr]: parseFloat(val) || 0 };
+        const updated = { ...fund, drawdowns: dd };
+        updated.distributions = computeDistributions(updated);
+        onUpdate(updated);
       };
 
-      let drawn = 0, distributed = 0;
-      for (const yr in fund.drawdowns) { if (parseInt(yr) <= currentYear) drawn += fund.drawdowns[yr]; }
-      for (const yr in fund.distributions) { if (parseInt(yr) <= currentYear) distributed += fund.distributions[yr]; }
-      const paidIn = drawn || 1;
+      const m = fundMetrics(fund);
 
       return (
         <div>
           <div className="panel">
-            <h2>
-              <span className="cat-color" style={{background: catColor(fund.category)}} />
-              {fund.name}
-            </h2>
+            <h2><span className="cat-color" style={{background: catColor(fund.category)}} />{fund.name}</h2>
             <div className="grid">
               <label>Fondnamn<input value={fund.name} onChange={e => update({name: e.target.value})} /></label>
               <label>Kategori
@@ -314,10 +217,18 @@
                   {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </select>
               </label>
-              <label>Vintage-år<input type="number" value={fund.vintageYear} onChange={e => update({vintageYear: parseInt(e.target.value) || 2020})} /></label>
-              <label>Åtagande<input type="number" value={fund.commitment} onChange={e => update({commitmentSize: parseFloat(e.target.value) || 0, commitment: parseFloat(e.target.value) || 0})} /></label>
-              <label>Fondlivslängd (år)<input type="number" min={1} max={25} value={fund.lifeYears} onChange={e => update({lifeYears: parseInt(e.target.value) || 10})} /></label>
-              <label>Nuvarande NAV<input type="number" value={fund.nav} onChange={e => update({nav: parseFloat(e.target.value) || 0})} /></label>
+              <label>Vintage-år<input type="number" value={fund.vintageYear} onChange={e => updateAndRecompute({vintageYear: parseInt(e.target.value) || 2020})} /></label>
+              <label>
+                Åtagande (commitment)
+                <input type="number" value={fund.commitment} onChange={e => updateAndRecompute({commitment: parseFloat(e.target.value) || 0})} />
+                <span className="field-hint">Totalt belopp du åtagit dig att investera</span>
+              </label>
+              <label>Fondlivslängd (år)<input type="number" min={1} max={25} value={fund.lifeYears} onChange={e => updateAndRecompute({lifeYears: parseInt(e.target.value) || 10})} /></label>
+              <label>
+                Nuvarande marknadsvärde (NAV)
+                <input type="number" value={fund.nav} onChange={e => update({nav: parseFloat(e.target.value) || 0})} />
+                <span className="field-hint">Vad din andel är värd idag</span>
+              </label>
               <label>Valuta
                 <select value={fund.currency} onChange={e => update({currency: e.target.value})}>
                   <option value="SEK">SEK</option><option value="EUR">EUR</option><option value="USD">USD</option>
@@ -330,50 +241,126 @@
             </div>
           </div>
 
+          {/* Return model */}
           <div className="panel">
-            <h2>Nyckeltal</h2>
-            <div className="cards">
-              <div className="card"><div className="card-label">Åtagande</div><div className="card-value">{fmt(fund.commitment, fund.currency)}</div></div>
-              <div className="card"><div className="card-label">Indraget</div><div className="card-value">{fmt(drawn, fund.currency)}</div></div>
-              <div className="card"><div className="card-label">Distribuerat</div><div className="card-value" style={{color:'#16a34a'}}>{fmt(distributed, fund.currency)}</div></div>
-              <div className="card"><div className="card-label">NAV</div><div className="card-value">{fmt(fund.nav, fund.currency)}</div></div>
-              <div className="card"><div className="card-label">Ofonderat</div><div className="card-value">{fmt(fund.commitment - drawn, fund.currency)}</div></div>
-              <div className="card"><div className="card-label">DPI</div><div className="card-value">{fmtPct(distributed / paidIn)}</div></div>
-              <div className="card"><div className="card-label">TVPI</div><div className="card-value" style={{color:(distributed+fund.nav)/paidIn>=1?'#16a34a':'#dc2626'}}>{fmtPct((distributed + fund.nav) / paidIn)}</div></div>
+            <h2>Avkastningsmodell</h2>
+            <div className="info-box">
+              <strong>Så fungerar det:</strong> Ange hur många gånger du tror pengarna kommer tillbaka (totalmultipel), och välj en profil för
+              <em> när</em> pengarna betalas tillbaka. Simulatorn beräknar sedan distributionerna per år automatiskt.
+            </div>
+
+            <h3>Förväntad totalmultipel (TVPI)</h3>
+            <p className="hint">
+              Hur många gånger investerat kapital förväntas komma tillbaka totalt (inklusive det som redan betalats ut och nuvarande marknadsvärde).
+              <br/>1.0x = pengarna tillbaka utan vinst. 1.5x = 50% avkastning. 2.0x = dubbla pengarna. Under 1.0x = förlust.
+            </p>
+            <div style={{display:'flex', alignItems:'center', gap:12, marginBottom:16}}>
+              <input type="range" min={0.5} max={3.0} step={0.05} value={fund.targetTvpi}
+                onChange={e => updateAndRecompute({targetTvpi: parseFloat(e.target.value)})}
+                style={{flex:1, maxWidth:300}} />
+              <span style={{fontSize:24, fontWeight:700, minWidth:60,
+                color: fund.targetTvpi >= 1 ? (fund.targetTvpi >= 1.5 ? '#16a34a' : '#333') : '#dc2626'}}>
+                {fmtX(fund.targetTvpi)}
+              </span>
+              <span style={{fontSize:12, color:'#888'}}>
+                = {fmt(m.totalDD * fund.targetTvpi, fund.currency)} tillbaka på {fmt(m.totalDD, fund.currency)} investerat
+              </span>
+            </div>
+
+            <h3>Återbetalningsprofil</h3>
+            <p className="hint">Välj hur du tror att pengarna kommer att betalas tillbaka över fondens livstid.</p>
+            <div className="profile-selector">
+              {Object.entries(DIST_PROFILES).map(([key, p]) => (
+                <div key={key} className={`profile-opt ${fund.distProfile === key ? 'active' : ''}`}
+                  onClick={() => updateAndRecompute({distProfile: key})}>
+                  <div style={{fontWeight:500}}>{p.label}</div>
+                  <div style={{fontSize:11, color:'#888', marginTop:2}}>{p.desc}</div>
+                </div>
+              ))}
             </div>
           </div>
 
+          {/* Metrics */}
           <div className="panel">
-            <h2>Drawdown-prognos per år</h2>
-            <p style={{fontSize:12,color:'#888',marginBottom:12}}>Historiska år (t.o.m. {currentYear}) visas i mörkare ton. Framtida år är redigerbara prognoser.</p>
+            <h2>Nyckeltal</h2>
+            <div className="cards">
+              <div className="card">
+                <div className="card-label">Åtagande</div>
+                <div className="card-value">{fmt(fund.commitment, fund.currency)}</div>
+                <div className="card-hint">Totalt utlovat kapital</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Indraget hittills</div>
+                <div className="card-value">{fmt(m.drawn, fund.currency)}</div>
+                <div className="card-hint">Kapital som faktiskt betalats in</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Utbetalt hittills</div>
+                <div className="card-value" style={{color:'#16a34a'}}>{fmt(m.dist, fund.currency)}</div>
+                <div className="card-hint">Pengar du fått tillbaka</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Marknadsvärde (NAV)</div>
+                <div className="card-value">{fmt(fund.nav, fund.currency)}</div>
+                <div className="card-hint">Vad din andel är värd idag</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Kvar att betala in</div>
+                <div className="card-value">{fmt(m.unfunded, fund.currency)}</div>
+                <div className="card-hint">Åtagande minus indraget</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Utbetalt / Inbetalt (DPI)</div>
+                <div className="card-value">{fmtX(m.dpi)}</div>
+                <div className="card-hint">Realiserad avkastning — pengar du faktiskt fått</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Värde / Inbetalt (RVPI)</div>
+                <div className="card-value">{fmtX(m.rvpi)}</div>
+                <div className="card-hint">Orealiserat — kvar i fonden relativt inbetalt</div>
+              </div>
+              <div className="card">
+                <div className="card-label">Totalmultipel nu (TVPI)</div>
+                <div className="card-value" style={{color: m.tvpiActual >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(m.tvpiActual)}</div>
+                <div className="card-hint">DPI + RVPI — allt du fått + kvarvarande värde</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Forecast table */}
+          <div className="panel">
+            <h2>Kassaflödesprognos per år</h2>
+            <p className="hint">Drawdowns kan redigeras manuellt. Distributionerna beräknas automatiskt utifrån din valda totalmultipel och återbetalningsprofil.</p>
             <div className="table-wrap">
               <table>
-                <thead><tr><th>År</th>{years.map(y => <th key={y} style={{textAlign:'right', color: y <= currentYear ? '#333' : '#aaa'}}>{y}</th>)}</tr></thead>
+                <thead><tr><th style={{minWidth:90}}>År</th>{years.map(y => <th key={y} style={{textAlign:'right', minWidth:80, color: y <= CY ? '#333' : '#aaa'}}>{y}</th>)}<th style={{textAlign:'right', minWidth:80}}>Totalt</th></tr></thead>
                 <tbody>
                   <tr className="row">
                     <td style={{fontWeight:500, color:'#dc2626'}}>Drawdown</td>
                     {years.map(y => (
                       <td key={y} className="td-number">
-                        <input type="number" className="cell-input" style={{textAlign:'right', color:'#dc2626', background: y <= currentYear ? '#fef2f2' : '#fff'}}
-                          value={fund.drawdowns[y] || 0} onChange={e => updateForecast('drawdowns', y, e.target.value)} />
+                        <input type="number" className="cell-input" style={{textAlign:'right', color:'#dc2626', background: y <= CY ? '#fef2f2' : '#fff'}}
+                          value={fund.drawdowns[y] || 0} onChange={e => updateDD(y, e.target.value)} />
                       </td>
                     ))}
+                    <td className="td-number" style={{fontWeight:600, color:'#dc2626'}}>{fmt(m.totalDD, fund.currency)}</td>
                   </tr>
                   <tr className="row">
                     <td style={{fontWeight:500, color:'#16a34a'}}>Distribution</td>
                     {years.map(y => (
-                      <td key={y} className="td-number">
-                        <input type="number" className="cell-input" style={{textAlign:'right', color:'#16a34a', background: y <= currentYear ? '#f0fdf4' : '#fff'}}
-                          value={fund.distributions[y] || 0} onChange={e => updateForecast('distributions', y, e.target.value)} />
+                      <td key={y} className="td-number" style={{color:'#16a34a', background: y <= CY ? '#f0fdf4' : '#fff'}}>
+                        {fmt(fund.distributions[y] || 0, fund.currency)}
                       </td>
                     ))}
+                    <td className="td-number" style={{fontWeight:600, color:'#16a34a'}}>{fmt(m.totalDist, fund.currency)}</td>
                   </tr>
                   <tr className="row">
                     <td style={{fontWeight:500, color:'#2563eb'}}>Netto</td>
                     {years.map(y => {
                       const net = (fund.distributions[y] || 0) - (fund.drawdowns[y] || 0);
-                      return <td key={y} className="td-number" style={{color: net >= 0 ? '#16a34a' : '#dc2626', fontSize:12}}>{fmt(net, fund.currency)}</td>;
+                      return <td key={y} className="td-number" style={{color: net >= 0 ? '#16a34a' : '#dc2626'}}>{fmt(net, fund.currency)}</td>;
                     })}
+                    <td className="td-number" style={{fontWeight:600, color: m.totalDist - m.totalDD >= 0 ? '#16a34a' : '#dc2626'}}>{fmt(m.totalDist - m.totalDD, fund.currency)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -383,14 +370,13 @@
           {/* Chart */}
           {(() => {
             const maxVal = Math.max(...years.map(y => Math.max(fund.drawdowns[y] || 0, fund.distributions[y] || 0)), 1);
-            const cH = 200;
-            const bW = Math.max(24, Math.min(45, 600 / years.length));
+            const cH = 200; const bW = Math.max(24, Math.min(45, 600 / years.length));
             return (
               <div className="panel">
                 <h2>Kassaflödesdiagram</h2>
                 <div className="legend">
-                  <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns</span>
-                  <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner</span>
+                  <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns (inbetalningar)</span>
+                  <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner (utbetalningar)</span>
                 </div>
                 <div className="chart-wrap">
                   <svg width={years.length * (bW + 10) + 40} height={cH + 40}>
@@ -398,12 +384,12 @@
                       const x = i * (bW + 10) + 20;
                       const dH = ((fund.drawdowns[y] || 0) / maxVal) * cH;
                       const distH = ((fund.distributions[y] || 0) / maxVal) * cH;
-                      const isPast = y <= currentYear;
+                      const isPast = y <= CY;
                       return (
                         <g key={y}>
                           <rect x={x} y={cH - dH} width={bW/2 - 1} height={dH} fill="#dc2626" opacity={isPast ? 0.9 : 0.35} rx={2} />
                           <rect x={x + bW/2 + 1} y={cH - distH} width={bW/2 - 1} height={distH} fill="#16a34a" opacity={isPast ? 0.9 : 0.35} rx={2} />
-                          <text x={x + bW/2} y={cH + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={y === currentYear ? 700 : 400}>{y}</text>
+                          <text x={x + bW/2} y={cH + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={y === CY ? 700 : 400}>{y}</text>
                         </g>
                       );
                     })}
@@ -417,58 +403,430 @@
       );
     }
 
-    // --- App ---
+    // ========== ANALYTICS DASHBOARD ==========
+    function AnalyticsDashboard({ funds, currency }) {
+      const [filterCat, setFilterCat] = useState('all');
+      const [filterVintageFrom, setFilterVintageFrom] = useState('');
+      const [filterVintageTo, setFilterVintageTo] = useState('');
+      const [groupBy, setGroupBy] = useState('category'); // 'category' | 'vintage' | 'none'
+
+      const filtered = useMemo(() => {
+        return funds.filter(f => {
+          if (filterCat !== 'all' && f.category !== filterCat) return false;
+          if (filterVintageFrom && f.vintageYear < parseInt(filterVintageFrom)) return false;
+          if (filterVintageTo && f.vintageYear > parseInt(filterVintageTo)) return false;
+          return true;
+        });
+      }, [funds, filterCat, filterVintageFrom, filterVintageTo]);
+
+      const vintages = [...new Set(funds.map(f => f.vintageYear))].sort();
+      const catsInUse = [...new Set(funds.map(f => f.category))];
+
+      // Aggregated metrics for filtered set
+      const agg = useMemo(() => {
+        let commitment = 0, nav = 0, drawn = 0, dist = 0, totalDD = 0, totalDist = 0;
+        for (const f of filtered) {
+          const m = fundMetrics(f);
+          commitment += f.commitment;
+          nav += f.nav;
+          drawn += m.drawn;
+          dist += m.dist;
+          totalDD += m.totalDD;
+          totalDist += m.totalDist;
+        }
+        const pi = drawn || 1;
+        return { commitment, nav, drawn, dist, totalDD, totalDist, unfunded: commitment - drawn, dpi: dist / pi, tvpi: (dist + nav) / pi, count: filtered.length };
+      }, [filtered]);
+
+      // Group data
+      const groups = useMemo(() => {
+        const map = {};
+        for (const f of filtered) {
+          const key = groupBy === 'category' ? f.category : groupBy === 'vintage' ? String(f.vintageYear) : 'all';
+          if (!map[key]) map[key] = [];
+          map[key].push(f);
+        }
+        return Object.entries(map).sort((a, b) => a[0].localeCompare(b[0])).map(([key, groupFunds]) => {
+          let commitment = 0, nav = 0, drawn = 0, dist = 0;
+          for (const f of groupFunds) { const m = fundMetrics(f); commitment += f.commitment; nav += f.nav; drawn += m.drawn; dist += m.dist; }
+          const pi = drawn || 1;
+          const label = groupBy === 'category' ? catLabel(key) : groupBy === 'vintage' ? `Vintage ${key}` : 'Alla fonder';
+          const color = groupBy === 'category' ? catColor(key) : '#2563eb';
+          return { key, label, color, count: groupFunds.length, commitment, nav, drawn, dist, tvpi: (dist + nav) / pi, dpi: dist / pi, funds: groupFunds };
+        });
+      }, [filtered, groupBy]);
+
+      // Yearly cash flow for filtered funds
+      const yearlyData = useMemo(() => {
+        const map = {};
+        for (const f of filtered) {
+          for (const yr in f.drawdowns) { if (!map[yr]) map[yr] = { dd: 0, dist: 0 }; map[yr].dd += f.drawdowns[yr] || 0; }
+          for (const yr in f.distributions) { if (!map[yr]) map[yr] = { dd: 0, dist: 0 }; map[yr].dist += f.distributions[yr] || 0; }
+        }
+        return Object.entries(map).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+      }, [filtered]);
+
+      // Stacked bar data per category per year
+      const stackedYearly = useMemo(() => {
+        if (groupBy !== 'category') return null;
+        const allYears = [...new Set(yearlyData.map(([yr]) => yr))].sort();
+        const cats = [...new Set(filtered.map(f => f.category))];
+        const data = allYears.map(yr => {
+          const row = { year: yr };
+          for (const cat of cats) {
+            row[cat + '_dd'] = 0;
+            row[cat + '_dist'] = 0;
+          }
+          for (const f of filtered) {
+            if (f.drawdowns[yr]) row[f.category + '_dd'] += f.drawdowns[yr];
+            if (f.distributions[yr]) row[f.category + '_dist'] += f.distributions[yr];
+          }
+          return row;
+        });
+        return { years: allYears, cats, data };
+      }, [filtered, yearlyData, groupBy]);
+
+      if (funds.length === 0) {
+        return <div className="panel"><h2>Analys</h2><div className="empty">Lägg till fonder för att se analyser.</div></div>;
+      }
+
+      const chartH = 220;
+      const maxCF = Math.max(...yearlyData.map(([, v]) => Math.max(v.dd, v.dist)), 1);
+      const barW = Math.max(20, Math.min(45, 650 / yearlyData.length));
+
+      return (
+        <div>
+          {/* Filters */}
+          <div className="panel">
+            <h2>Analys & filter</h2>
+            <div className="filter-bar">
+              <label>Kategori:
+                <select value={filterCat} onChange={e => setFilterCat(e.target.value)}>
+                  <option value="all">Alla kategorier</option>
+                  {catsInUse.map(c => <option key={c} value={c}>{catLabel(c)}</option>)}
+                </select>
+              </label>
+              <label>Vintage från:
+                <select value={filterVintageFrom} onChange={e => setFilterVintageFrom(e.target.value)}>
+                  <option value="">—</option>
+                  {vintages.map(v => <option key={v} value={v}>{v}</option>)}
+                </select>
+              </label>
+              <label>Vintage till:
+                <select value={filterVintageTo} onChange={e => setFilterVintageTo(e.target.value)}>
+                  <option value="">—</option>
+                  {vintages.map(v => <option key={v} value={v}>{v}</option>)}
+                </select>
+              </label>
+              <label>Gruppera:
+                <select value={groupBy} onChange={e => setGroupBy(e.target.value)}>
+                  <option value="category">Per kategori</option>
+                  <option value="vintage">Per vintage-år</option>
+                  <option value="none">Ingen gruppering</option>
+                </select>
+              </label>
+            </div>
+            <p style={{fontSize:12, color:'#888'}}>Visar {agg.count} av {funds.length} fonder</p>
+          </div>
+
+          {/* Summary */}
+          <div className="panel">
+            <h2>Sammanfattning ({agg.count} fonder)</h2>
+            <div className="cards">
+              <div className="card"><div className="card-label">Totalt åtagande</div><div className="card-value">{fmtM(agg.commitment, currency)}</div></div>
+              <div className="card"><div className="card-label">Indraget hittills</div><div className="card-value">{fmtM(agg.drawn, currency)}</div><div className="card-hint">Kapital som betalats in t.o.m. {CY}</div></div>
+              <div className="card"><div className="card-label">Utbetalt hittills</div><div className="card-value" style={{color:'#16a34a'}}>{fmtM(agg.dist, currency)}</div><div className="card-hint">Pengar du fått tillbaka</div></div>
+              <div className="card"><div className="card-label">Totalt NAV</div><div className="card-value">{fmtM(agg.nav, currency)}</div><div className="card-hint">Summa marknadsvärden idag</div></div>
+              <div className="card"><div className="card-label">Kvar att betala in</div><div className="card-value">{fmtM(agg.unfunded, currency)}</div></div>
+              <div className="card"><div className="card-label">Utbetalt / Inbetalt (DPI)</div><div className="card-value">{fmtX(agg.dpi)}</div><div className="card-hint">Realiserad avkastning</div></div>
+              <div className="card"><div className="card-label">Totalmultipel (TVPI)</div><div className="card-value" style={{color: agg.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(agg.tvpi)}</div><div className="card-hint">Utbetalt + NAV relativt inbetalt</div></div>
+            </div>
+          </div>
+
+          {/* Grouped breakdown */}
+          <div className="panel">
+            <h2>Uppdelning — {groupBy === 'category' ? 'per kategori' : groupBy === 'vintage' ? 'per vintage-år' : 'alla'}</h2>
+            {/* Allocation bar */}
+            {groups.length > 1 && (
+              <div>
+                <div style={{fontSize:11, color:'#888', marginBottom:4}}>Åtagandefördelning</div>
+                <div className="stacked-bar">
+                  {groups.map(g => (
+                    <div key={g.key} style={{width: `${(g.commitment / agg.commitment) * 100}%`, background: g.color, opacity: 0.8}}
+                      title={`${g.label}: ${fmtM(g.commitment, currency)} (${fmtPct(g.commitment / agg.commitment)})`} />
+                  ))}
+                </div>
+                <div style={{display:'flex', gap:12, flexWrap:'wrap', marginTop:6, marginBottom:16}}>
+                  {groups.map(g => (
+                    <span key={g.key} style={{fontSize:11, display:'flex', alignItems:'center', gap:4}}>
+                      <span className="dot" style={{background:g.color, width:8, height:8}} />
+                      {g.label} {fmtPct(g.commitment / agg.commitment)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Grupp</th><th style={{textAlign:'right'}}>Antal</th><th style={{textAlign:'right'}}>Åtagande</th>
+                    <th style={{textAlign:'right'}}>Indraget</th><th style={{textAlign:'right'}}>Utbetalt</th>
+                    <th style={{textAlign:'right'}}>NAV</th><th style={{textAlign:'right'}}>DPI</th><th style={{textAlign:'right'}}>TVPI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groups.map(g => (
+                    <tr key={g.key} className="row">
+                      <td style={{fontWeight:500}}><span className="cat-color" style={{background:g.color}} />{g.label}</td>
+                      <td className="td-number">{g.count}</td>
+                      <td className="td-number">{fmtM(g.commitment, currency)}</td>
+                      <td className="td-number">{fmtM(g.drawn, currency)}</td>
+                      <td className="td-number" style={{color:'#16a34a'}}>{fmtM(g.dist, currency)}</td>
+                      <td className="td-number">{fmtM(g.nav, currency)}</td>
+                      <td className="td-number">{fmtX(g.dpi)}</td>
+                      <td className="td-number" style={{color: g.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(g.tvpi)}</td>
+                    </tr>
+                  ))}
+                  {groups.length > 1 && (
+                    <tr className="row" style={{fontWeight:600}}>
+                      <td>Totalt</td>
+                      <td className="td-number">{agg.count}</td>
+                      <td className="td-number">{fmtM(agg.commitment, currency)}</td>
+                      <td className="td-number">{fmtM(agg.drawn, currency)}</td>
+                      <td className="td-number" style={{color:'#16a34a'}}>{fmtM(agg.dist, currency)}</td>
+                      <td className="td-number">{fmtM(agg.nav, currency)}</td>
+                      <td className="td-number">{fmtX(agg.dpi)}</td>
+                      <td className="td-number" style={{color: agg.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(agg.tvpi)}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Yearly chart */}
+          <div className="panel">
+            <h2>Kassaflödesprognos per år</h2>
+            <p className="hint">Staplar med full färg = historiskt (t.o.m. {CY}). Blekare staplar = prognos.</p>
+            <div className="legend">
+              <span className="legend-item"><span className="dot" style={{background:'#dc2626'}} /> Drawdowns (inbetalningar)</span>
+              <span className="legend-item"><span className="dot" style={{background:'#16a34a'}} /> Distributioner (utbetalningar)</span>
+            </div>
+            <div className="chart-wrap">
+              <svg width={yearlyData.length * (barW + 12) + 60} height={chartH + 50}>
+                {yearlyData.map(([yr, v], i) => {
+                  const x = i * (barW + 12) + 30;
+                  const dH = (v.dd / maxCF) * chartH;
+                  const distH = (v.dist / maxCF) * chartH;
+                  const isPast = parseInt(yr) <= CY;
+                  return (
+                    <g key={yr}>
+                      <rect x={x} y={chartH - dH} width={barW/2 - 1} height={dH} fill="#dc2626" opacity={isPast ? 0.9 : 0.35} rx={2}>
+                        <title>{yr}: Drawdown {fmt(v.dd, currency)}</title>
+                      </rect>
+                      <rect x={x + barW/2 + 1} y={chartH - distH} width={barW/2 - 1} height={distH} fill="#16a34a" opacity={isPast ? 0.9 : 0.35} rx={2}>
+                        <title>{yr}: Distribution {fmt(v.dist, currency)}</title>
+                      </rect>
+                      <text x={x + barW/2} y={chartH + 14} textAnchor="middle" fontSize={10} fill={isPast ? '#333' : '#aaa'} fontWeight={parseInt(yr) === CY ? 700 : 400}>{yr}</text>
+                    </g>
+                  );
+                })}
+                <line x1={0} y1={chartH} x2={yearlyData.length * (barW + 12) + 60} y2={chartH} stroke="#e5e7eb" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Cumulative net */}
+          {(() => {
+            let cumNet = 0;
+            const cumData = yearlyData.map(([yr, v]) => { cumNet += v.dist - v.dd; return { yr, cumNet }; });
+            const maxAbs = Math.max(...cumData.map(d => Math.abs(d.cumNet)), 1);
+            const cH2 = 180;
+            const midY = cH2 / 2;
+            return (
+              <div className="panel">
+                <h2>Kumulativt nettokassaflöde</h2>
+                <p className="hint">Visar hur det totala nettot (utbetalningar minus inbetalningar) utvecklas över tid. Under noll = du har betalat in mer än du fått tillbaka.</p>
+                <div className="chart-wrap">
+                  <svg width={cumData.length * (barW + 12) + 60} height={cH2 + 50}>
+                    <line x1={0} y1={midY} x2={cumData.length * (barW + 12) + 60} y2={midY} stroke="#e5e7eb" strokeDasharray="4" />
+                    <text x={4} y={midY - 4} fontSize={10} fill="#aaa">0</text>
+                    {cumData.map((d, i) => {
+                      const x = i * (barW + 12) + 30 + barW / 2;
+                      const y = midY - (d.cumNet / maxAbs) * (cH2 / 2 - 10);
+                      return (
+                        <g key={d.yr}>
+                          <circle cx={x} cy={y} r={4} fill={d.cumNet >= 0 ? '#16a34a' : '#dc2626'} />
+                          {i > 0 && (
+                            <line x1={(i - 1) * (barW + 12) + 30 + barW / 2} y1={midY - (cumData[i-1].cumNet / maxAbs) * (cH2 / 2 - 10)}
+                              x2={x} y2={y} stroke={d.cumNet >= 0 ? '#16a34a' : '#dc2626'} strokeWidth={2} opacity={0.6} />
+                          )}
+                          <text x={x} y={cH2 + 14} textAnchor="middle" fontSize={10} fill={parseInt(d.yr) <= CY ? '#333' : '#aaa'}>{d.yr}</text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Fund table */}
+          <div className="panel">
+            <h2>Alla fonder (filtrerat)</h2>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fond</th><th>Kategori</th><th>Vintage</th><th style={{textAlign:'right'}}>Åtagande</th>
+                    <th style={{textAlign:'right'}}>NAV</th><th style={{textAlign:'right'}}>Mål-TVPI</th><th style={{textAlign:'right'}}>Aktuell TVPI</th><th>Profil</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map(f => {
+                    const m = fundMetrics(f);
+                    return (
+                      <tr key={f.id} className="row">
+                        <td style={{fontWeight:500}}>{f.name}</td>
+                        <td><span className="cat-color" style={{background:catColor(f.category)}} />{catLabel(f.category)}</td>
+                        <td>{f.vintageYear}</td>
+                        <td className="td-number">{fmtM(f.commitment, currency)}</td>
+                        <td className="td-number">{fmtM(f.nav, currency)}</td>
+                        <td className="td-number">{fmtX(f.targetTvpi)}</td>
+                        <td className="td-number" style={{color: m.tvpiActual >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(m.tvpiActual)}</td>
+                        <td style={{fontSize:11, color:'#888'}}>{DIST_PROFILES[f.distProfile]?.label || '—'}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ========== PORTFOLIO OVERVIEW ==========
+    function PortfolioOverview({ funds, currency }) {
+      if (funds.length === 0) {
+        return (
+          <div className="panel">
+            <h2>Portföljöversikt</h2>
+            <div className="info-box">
+              <strong>Välkommen!</strong> Lägg till fonder med knappen "Lägg till fond" i sidomenyn, eller klicka "Ladda exempelportfölj" för att komma igång snabbt.
+            </div>
+          </div>
+        );
+      }
+
+      const agg = useMemo(() => {
+        let commitment = 0, nav = 0, drawn = 0, dist = 0;
+        for (const f of funds) {
+          const m = fundMetrics(f);
+          commitment += f.commitment; nav += f.nav; drawn += m.drawn; dist += m.dist;
+        }
+        const pi = drawn || 1;
+        return { commitment, nav, drawn, dist, unfunded: commitment - drawn, dpi: dist / pi, tvpi: (dist + nav) / pi };
+      }, [funds]);
+
+      const catBreakdown = useMemo(() => {
+        const map = {};
+        for (const f of funds) {
+          if (!map[f.category]) map[f.category] = { commitment: 0, nav: 0, count: 0 };
+          map[f.category].commitment += f.commitment; map[f.category].nav += f.nav; map[f.category].count++;
+        }
+        return Object.entries(map).sort((a, b) => b[1].commitment - a[1].commitment);
+      }, [funds]);
+
+      return (
+        <div>
+          <div className="panel">
+            <h2>Portföljöversikt — {funds.length} fonder</h2>
+            <div className="cards">
+              <div className="card"><div className="card-label">Totalt åtagande</div><div className="card-value">{fmtM(agg.commitment, currency)}</div><div className="card-hint">Summa utlovat kapital till alla fonder</div></div>
+              <div className="card"><div className="card-label">Indraget hittills</div><div className="card-value">{fmtM(agg.drawn, currency)}</div><div className="card-hint">Summa inbetalat kapital t.o.m. {CY}</div></div>
+              <div className="card"><div className="card-label">Utbetalt hittills</div><div className="card-value" style={{color:'#16a34a'}}>{fmtM(agg.dist, currency)}</div><div className="card-hint">Pengar du fått tillbaka</div></div>
+              <div className="card"><div className="card-label">Totalt NAV</div><div className="card-value">{fmtM(agg.nav, currency)}</div><div className="card-hint">Summa marknadsvärde idag</div></div>
+              <div className="card"><div className="card-label">Kvar att betala in</div><div className="card-value">{fmtM(agg.unfunded, currency)}</div><div className="card-hint">Framtida inbetalningar</div></div>
+              <div className="card"><div className="card-label">Utbetalt / Inbetalt (DPI)</div><div className="card-value">{fmtX(agg.dpi)}</div><div className="card-hint">Realiserad avkastning</div></div>
+              <div className="card"><div className="card-label">Totalmultipel (TVPI)</div><div className="card-value" style={{color: agg.tvpi >= 1 ? '#16a34a' : '#dc2626'}}>{fmtX(agg.tvpi)}</div><div className="card-hint">{agg.tvpi >= 1 ? 'Portföljen är i vinst' : 'Portföljen är i förlust'}</div></div>
+            </div>
+          </div>
+
+          <div className="panel">
+            <h2>Fördelning per kategori</h2>
+            <div className="stacked-bar" style={{height:28, marginBottom:12}}>
+              {catBreakdown.map(([cat, data]) => (
+                <div key={cat} style={{width: `${(data.commitment / agg.commitment) * 100}%`, background: catColor(cat), opacity: 0.8}}
+                  title={`${catLabel(cat)}: ${fmtPct(data.commitment / agg.commitment)}`} />
+              ))}
+            </div>
+            {catBreakdown.map(([cat, data]) => (
+              <div key={cat} className="cat-summary">
+                <span className="cat-color" style={{background: catColor(cat)}} />
+                <span className="cat-summary-name">{catLabel(cat)} ({data.count})</span>
+                <span className="cat-summary-val">{fmtM(data.commitment, currency)}</span>
+                <span className="cat-summary-val">{fmtPct(data.commitment / agg.commitment)}</span>
+                <span className="cat-summary-val">NAV: {fmtM(data.nav, currency)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ========== APP ==========
     function App() {
       const [funds, setFunds] = useState([]);
-      const [selectedId, setSelectedId] = useState(null); // null = dashboard
+      const [view, setView] = useState('overview'); // 'overview' | 'analytics' | fund id
       const [currency] = useState('SEK');
 
       const addFund = () => {
         const n = funds.length + 1;
         const cats = CATEGORIES.map(c => c.value);
-        const f = createFund(`Fond ${n}`, cats[n % cats.length], 50000000, 2021, 'SEK', 10);
+        const tvpis = [1.7, 1.5, 1.4, 2.2, 1.3, 1.6, 1.5];
+        const profiles = ['standard', 'standard', 'even', 'late', 'early', 'standard', 'standard'];
+        const f = createFund(`Fond ${n}`, cats[n % cats.length], 50000000, 2021, 'SEK', 10, tvpis[n % tvpis.length], profiles[n % profiles.length]);
         setFunds([...funds, f]);
-        setSelectedId(f.id);
+        setView(f.id);
       };
 
-      const updateFund = (updated) => {
-        setFunds(funds.map(f => f.id === updated.id ? updated : f));
-      };
-
-      const deleteFund = (id) => {
-        setFunds(funds.filter(f => f.id !== id));
-        setSelectedId(null);
-      };
+      const updateFund = (updated) => setFunds(funds.map(f => f.id === updated.id ? updated : f));
+      const deleteFund = (id) => { setFunds(funds.filter(f => f.id !== id)); setView('overview'); };
 
       const addSamplePortfolio = () => {
         const samples = [
-          createFund('Nordic Buyout VII', 'buyout', 150000000, 2019, 'SEK', 12),
-          createFund('Infra Partners III', 'infrastructure', 80000000, 2020, 'SEK', 15),
-          createFund('PropCo Real Estate II', 'real_estate', 60000000, 2021, 'SEK', 10),
-          createFund('Tech Ventures IV', 'venture', 40000000, 2022, 'SEK', 10),
-          createFund('Credit Opps Fund I', 'credit', 100000000, 2020, 'SEK', 8),
-          createFund('Secondary Fund V', 'secondaries', 70000000, 2023, 'SEK', 10),
+          createFund('Nordic Buyout VII', 'buyout', 150000000, 2019, 'SEK', 12, 1.8, 'standard'),
+          createFund('Infra Partners III', 'infrastructure', 80000000, 2020, 'SEK', 15, 1.4, 'even'),
+          createFund('PropCo Real Estate II', 'real_estate', 60000000, 2021, 'SEK', 10, 1.5, 'standard'),
+          createFund('Tech Ventures IV', 'venture', 40000000, 2022, 'SEK', 10, 2.5, 'late'),
+          createFund('Credit Opps Fund I', 'credit', 100000000, 2020, 'SEK', 8, 1.3, 'early'),
+          createFund('Secondary Fund V', 'secondaries', 70000000, 2023, 'SEK', 10, 1.6, 'standard'),
         ];
         setFunds(samples);
-        setSelectedId(null);
+        setView('overview');
       };
 
-      const selected = funds.find(f => f.id === selectedId);
+      const selectedFund = funds.find(f => f.id === view);
 
       return (
         <div>
           <header>
             <h1>PE Portföljsimulator</h1>
-            <span>Simulera kassaflöden för din PE-portfölj</span>
+            <span>Simulera kassaflöden och avkastning för din PE-portfölj</span>
           </header>
           <div className="layout">
             <div className="sidebar">
-              <div style={{padding:'0 16px 8px', cursor:'pointer', fontSize:13, fontWeight: selectedId === null ? 600 : 400, color: selectedId === null ? '#2563eb' : '#333'}} onClick={() => setSelectedId(null)}>
+              <div className={`nav-item ${view === 'overview' ? 'active' : ''}`} onClick={() => setView('overview')}>
                 Portföljöversikt
+              </div>
+              <div className={`nav-item ${view === 'analytics' ? 'active' : ''}`} onClick={() => setView('analytics')}>
+                Analys
               </div>
               <h3>Fonder</h3>
               {funds.map(f => (
-                <div key={f.id} className={`fund-item ${f.id === selectedId ? 'active' : ''}`} onClick={() => setSelectedId(f.id)}>
+                <div key={f.id} className={`fund-item ${view === f.id ? 'active' : ''}`} onClick={() => setView(f.id)}>
                   <span>{f.name}</span>
                   <span className="cat-badge" style={{background: catColor(f.category) + '22', color: catColor(f.category)}}>{catLabel(f.category)}</span>
                 </div>
@@ -479,10 +837,12 @@
               )}
             </div>
             <div className="main-content">
-              {selected ? (
-                <FundDetail fund={selected} onUpdate={updateFund} onDelete={() => deleteFund(selected.id)} />
+              {selectedFund ? (
+                <FundDetail fund={selectedFund} onUpdate={updateFund} onDelete={() => deleteFund(selectedFund.id)} />
+              ) : view === 'analytics' ? (
+                <AnalyticsDashboard funds={funds} currency={currency} />
               ) : (
-                <PortfolioDashboard funds={funds} currency={currency} />
+                <PortfolioOverview funds={funds} currency={currency} />
               )}
             </div>
           </div>
